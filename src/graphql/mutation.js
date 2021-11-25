@@ -31,4 +31,11 @@ export default {
       }
     }
   }`,
+
+  ACTIVE_SHIPPER: gql`mutation ActiveShipper($name: String!, $image: String!) {
+    activeShipper(name: $name, image: $image) {
+      success
+      message
+    }
+  }`
 }
