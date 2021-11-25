@@ -13,7 +13,7 @@ export default {
       user {
         _id
         role
-        isBuyer
+        isShipper
       }
       token
     }

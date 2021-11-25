@@ -4,6 +4,10 @@ import Home from "./home";
 import Notification from "./notification";
 import Profile from "./profile";
 import AuthPhone from "./auth-phone";
+import Wallet from "./wallet";
+import Order from "./order";
+import ActiveShipper from "./active-shipper";
+
 export {
   Register,
   Login,
@@ -11,4 +15,7 @@ export {
   Notification,
   Profile,
   AuthPhone,
+  Wallet,
+  Order,
+  ActiveShipper
 };

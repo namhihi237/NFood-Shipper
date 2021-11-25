@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TabBar } from '../components';
 import { SCREEN } from '../constants';
-import { Notification, Home, Profile } from '../pages';
+import { Notification, Home, Profile, Wallet, Order } from '../pages';
 const Tab = createBottomTabNavigator();
 
 const config = {
@@ -29,7 +29,8 @@ function TabHome() {
       }}
     >
       <Tab.Screen name={SCREEN.HOME} component={Home} options={{ icon: 'home' }} />
-      <Tab.Screen name={SCREEN.NOTIFICATION} component={Notification} options={{ icon: 'bell' }} />
+      <Tab.Screen name={SCREEN.ORDER} component={Order} options={{ icon: 'list-ol' }} />
+      <Tab.Screen name={SCREEN.WALLET} component={Wallet} options={{ icon: 'wallet' }} />
       <Tab.Screen name={SCREEN.PROFILE} component={Profile} options={{ icon: 'user' }} />
 
     </Tab.Navigator>

@@ -6,4 +6,7 @@ export default {
   NOTIFICATION: 'notification',
   TAB: 'tab',
   AUTH_PHONE: 'authPhone',
+  WALLET: 'wallet',
+  ORDER: 'order',
+  ACTIVE_SHIPPER: 'activeShipper',
 }

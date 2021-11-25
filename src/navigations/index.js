@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SCREEN } from '../constants';
-import { Login, Register, AuthPhone } from '../pages';
+import { Login, Register, AuthPhone, ActiveShipper } from '../pages';
 import Tab from './tab';
 const Stack = createStackNavigator();
 
@@ -31,6 +31,7 @@ const Navigation = () => {
         <Stack.Screen name={SCREEN.LOGIN} component={Login} />
         <Stack.Screen name={SCREEN.REGISTER} component={Register} />
         <Stack.Screen name={SCREEN.AUTH_PHONE} component={AuthPhone} />
+        <Stack.Screen name={SCREEN.ACTIVE_SHIPPER} component={ActiveShipper} />
         <Stack.Screen name={SCREEN.TAB} component={Tab} />
       </Stack.Navigator>
     </NavigationContainer>

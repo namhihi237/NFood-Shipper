@@ -24,7 +24,6 @@ export default function Register(props) {
       role: "buyer"
     },
     onCompleted: (data) => {
-      // navigation.navigate(SCREEN.LOGIN);
       navigation.navigate(SCREEN.AUTH_PHONE, { phoneNumber });
     },
     onError: (error) => {

@@ -58,10 +58,10 @@ export default function Login(props) {
     onCompleted: async (data) => {
       Toast('Đăng nhập thành công', 'success', 'top-right');
       await storageUtils.setString('token', data.login.token);
-      if (data.login.user.isBuyer) {
+      if (data.login.user.isShipper) {
         navigation.navigate(SCREEN.TAB);
       } else {
-        navigation.navigate(SCREEN.REGISTER_BUYER);
+        navigation.navigate(SCREEN.ACTIVE_SHIPPER);
       }
     },
     onError: (error) => {
