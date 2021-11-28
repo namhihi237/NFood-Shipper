@@ -47,14 +47,15 @@ const TabBar = ({ state, descriptors, navigation }) => {
       setModalVisible(true);
     }
   }
+
   React.useEffect(() => {
-
     getLocation();
+  }, []);
 
+  React.useEffect(() => {
     setInterval(async () => {
       const location = await GPSUtils.getCurrentPosition();
       if (location) {
-        setIsGPS(true);
         updateLocationShipper({
           variables: {
             latitude: location.coords.latitude,
@@ -62,8 +63,8 @@ const TabBar = ({ state, descriptors, navigation }) => {
           }
         });
       } else {
-        setIsGPS(false);
         setModalVisible(true);
+        setIsGPS(false);
       }
     }, 30000);
 
