@@ -7,4 +7,5 @@ import HeaderBack from "./header-back";
 import Search from "./search";
 import Cart from "./cart";
 import InputAuth from "./input-auth";
-export { Toast, Loading, TabBar, InputField, ButtonCustom, HeaderBack, Search, Cart, InputAuth };
+import Header from "./header";
+export { Toast, Loading, TabBar, InputField, ButtonCustom, HeaderBack, Search, Cart, InputAuth, Header };

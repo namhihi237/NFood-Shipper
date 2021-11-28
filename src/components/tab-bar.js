@@ -66,7 +66,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
         setModalVisible(true);
         setIsGPS(false);
       }
-    }, 30000);
+    }, 10000);
 
     // clear setTimeout
     return () => {

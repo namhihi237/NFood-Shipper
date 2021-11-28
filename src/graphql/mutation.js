@@ -41,5 +41,9 @@ export default {
 
   UPDATE_LOCATION: gql`mutation UpdateLocationShipper($latitude: Float!, $longitude: Float!) {
     updateLocationShipper(latitude: $latitude, longitude: $longitude)
+  }`,
+
+  ACTIVE_SHIPPER_ORDER: gql`mutation Mutation {
+    activeShippingOrder
   }`
 }

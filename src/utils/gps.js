@@ -8,7 +8,6 @@ class GPS {
     this.options = {
       enableHighAccuracy: true,
       timeout: 20000,
-      maximumAge: 1000,
     };
   }
 
@@ -49,6 +48,7 @@ class GPS {
           resolve(position);
         },
         (error) => {
+          console.log(error);
           resolve(null);
         },
         this.options,
