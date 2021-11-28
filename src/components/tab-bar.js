@@ -1,15 +1,104 @@
 import * as React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Badge } from 'react-native-elements';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { useMutation } from '@apollo/client';
 
+import { Text, Button, Box, View, Modal } from "native-base";
+import { GPSUtils } from "../utils";
+import { InputField, ButtonCustom, Toast, Loading, Search, Cart } from './index';
+import { MUTATION } from "../graphql";
 const TabBar = ({ state, descriptors, navigation }) => {
 
   const [count, setCount] = React.useState(0);
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [isGPS, setIsGPS] = React.useState(false);
+
+  const [updateLocationShipper] = useMutation(MUTATION.UPDATE_LOCATION, {
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const getLocation = async () => {
+    try {
+
+      const status = await GPSUtils.requestPermission();
+      if (status === 'already-enabled') {
+        setModalVisible(false);
+        const location = await GPSUtils.getCurrentPosition();
+        setIsGPS(true);
+        updateLocationShipper({
+          variables: {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude
+          }
+        });
+      } else if (status === 'enabled') {
+        setModalVisible(false);
+        getLocation();
+      }
+    } catch (error) {
+      setIsGPS(false);
+      setModalVisible(true);
+    }
+  }
+  React.useEffect(() => {
+
+    getLocation();
+
+    setInterval(async () => {
+      const location = await GPSUtils.getCurrentPosition();
+      if (location) {
+        setIsGPS(true);
+        updateLocationShipper({
+          variables: {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude
+          }
+        });
+      } else {
+        setIsGPS(false);
+        setModalVisible(true);
+      }
+    }, 30000);
+
+    // clear setTimeout
+    return () => {
+      clearTimeout();
+    };
+  }, []);
+
+  const renderOpenGPS = () => {
+    return (
+      <Modal
+        isOpen={modalVisible}
+        onClose={() => setModalVisible(false)}
+        closeOnOverlayClick={false}
+      >
+        <Modal.Content>
+          <Modal.Header>Bật định vị GPS với độ chính xác cao</Modal.Header>
+          <Modal.Body>
+            <Text>Điều này sẽ giúp chúng tôi tính toán vị trí của bạn tốt hơn để đưa ra gợi ý và tính toán chi phí hợp lý</Text>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              flex="1"
+              onPress={() => {
+                getLocation();
+              }}
+            >
+              Bật định vị
+            </Button>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -52,6 +141,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
           </TouchableOpacity>
         );
       })}
+      {!isGPS ? renderOpenGPS() : null}
     </View>
   );
 };

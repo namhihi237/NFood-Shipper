@@ -49,7 +49,7 @@ class GPS {
           resolve(position);
         },
         (error) => {
-          reject(error);
+          resolve(null);
         },
         this.options,
       );

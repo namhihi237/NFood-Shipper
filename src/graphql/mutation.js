@@ -37,5 +37,9 @@ export default {
       success
       message
     }
+  }`,
+
+  UPDATE_LOCATION: gql`mutation UpdateLocationShipper($latitude: Float!, $longitude: Float!) {
+    updateLocationShipper(latitude: $latitude, longitude: $longitude)
   }`
 }
