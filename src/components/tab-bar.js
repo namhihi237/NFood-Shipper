@@ -11,6 +11,8 @@ import { useMutation, useSubscription } from '@apollo/client';
 import { Text, Button, Center, View, Modal, HStack, VStack } from "native-base";
 import { GPSUtils, moneyUtils } from "../utils";
 import { MUTATION, SUBSCRIPTION } from "../graphql";
+import { useRecoilState } from 'recoil';
+import {locationGPS} from "../recoil"
 const TabBar = ({ state, descriptors, navigation }) => {
 
   const [count, setCount] = React.useState(0);
@@ -19,6 +21,8 @@ const TabBar = ({ state, descriptors, navigation }) => {
   const [showModal, setShowModal] = React.useState(false)
 
   const [timeHideOrder, setTimeHideOrder] = React.useState(0);
+  const [previousLocation, setPreviousLocation] = React.useState(null);
+  const [locationG, setLocationG] = useRecoilState(locationGPS);
 
   const [updateLocationShipper] = useMutation(MUTATION.UPDATE_LOCATION, {
   });
@@ -41,12 +45,23 @@ const TabBar = ({ state, descriptors, navigation }) => {
         setModalVisible(false);
         const location = await GPSUtils.getCurrentPosition();
         setIsGPS(true);
+        setPreviousLocation({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+        console.log("set");
         updateLocationShipper({
           variables: {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude
           }
         });
+
+        setLocationG({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+
       } else if (status === 'enabled') {
         setModalVisible(false);
         getLocation();
@@ -79,17 +94,31 @@ const TabBar = ({ state, descriptors, navigation }) => {
     setInterval(async () => {
       const location = await GPSUtils.getCurrentPosition();
       if (location) {
-        updateLocationShipper({
-          variables: {
+        // check has changed location
+        if (previousLocation && (previousLocation?.latitude !== location.coords.latitude || previousLocation?.longitude !== location.coords.longitude)) {
+          updateLocationShipper({
+            variables: {
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude
+            }
+          });
+          setPreviousLocation({
             latitude: location.coords.latitude,
-            longitude: location.coords.longitude
-          }
-        });
+            longitude: location.coords.longitude,
+          });
+
+          setLocationG({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          });
+
+          console.log("updated");
+        }
       } else {
         setModalVisible(true);
         setIsGPS(false);
       }
-    }, 10000);
+    }, 5000);
     return () => {
       clearTimeout();
     };
@@ -125,7 +154,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
   const renderModelShippingOrder = () => {
     return (<Modal isOpen={showModal} onClose={() => setShowModal(false)} size="lg" closeOnOverlayClick={false}>
       <Modal.Content maxWidth="350">
-        <Modal.Header>{timeHideOrder > 0 ? `Đơn hàng hết hạn sau ${timeHideOrder} s` : null}</Modal.Header>
+        <Modal.Header>{timeHideOrder > 0 ? `Đơn giao hết hạn sau ${timeHideOrder} s` : null}</Modal.Header>
         <Modal.Body>
           <VStack space={4}>
             <HStack alignItems="center" justifyContent="space-between">

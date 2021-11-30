@@ -1,19 +1,21 @@
-import { Text, Image, Button, View, Switch } from "native-base";
+import { Text, Button, View, Switch } from "native-base";
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Image, ScrollView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useLazyQuery, useQuery } from '@apollo/client';
 import { MUTATION, QUERY } from '../../graphql';
-
+import { locationGPS } from "../../recoil";
+import { useRecoilState } from "recoil";
 import { InputField, ButtonCustom, Toast, Loading, Header } from '../../components';
 import { SCREEN } from "../../constants";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { timeUtils } from "../../utils";
-
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 export default function Home(props) {
 
   const [isShippingOrder, setIsShippingOrder] = useState(false);
+  const [location, setLocation] = useRecoilState(locationGPS);
 
   const { data } = useQuery(QUERY.GET_USER_INFO, {
     variables: { role: 'shipper' },
@@ -55,6 +57,28 @@ export default function Home(props) {
             }}
           />
         </View>
+      </View>
+      <View style={{backgroundColor: 'red', height: 400}}>
+        <MapView
+          initialRegion={{
+            latitude: location.latitude ? location.latitude : 16.0764886,
+            longitude: location.longitude ? location.longitude : 108.14978387,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+          provider={PROVIDER_GOOGLE}
+          style={{ flex: 1 }}
+        >
+          {location.latitude && location.longitude ? (<MapView.Marker
+            key={1}
+            centerOffset={{ x: 25, y: 25 }}
+            anchor={{ x: 0.5, y: 0.5 }}
+            coordinate={location}
+            title={`Tôi`}
+          >
+            <Image source={require('../../../assets/images/struck.png')} style={{ height: 35, width: 35 }} />
+          </MapView.Marker>) : null}
+        </MapView>
       </View>
     </View>
   );

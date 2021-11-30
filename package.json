@@ -28,6 +28,7 @@
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-image-picker": "^4.1.2",
+    "react-native-maps": "^0.29.4",
     "react-native-pager-view": "^5.4.8",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^3.3.2",
