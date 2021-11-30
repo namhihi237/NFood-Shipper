@@ -5,13 +5,14 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 
-import { InputField, ButtonCustom, Toast, Loading } from '../../components';
+import { InputField, ButtonCustom, Toast, Loading, Header } from '../../components';
 import { SCREEN } from "../../constants"
 export default function Order(props) {
 
   const navigation = useNavigation();
   return (
     <View style={styles.mainContainer}>
+      <Header title={"NFood Shipper"} />
       <View style={{ alignItems: 'center', marginTop: hp("5%"), marginBottom: 30 }}>
         <Text fontSize="2xl" bold>Order</Text>
       </View>
@@ -23,10 +24,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: '#fff',
     flex: 1,
-    paddingLeft: wp("5%"),
-    paddingRight: wp("5%"),
     display: 'flex',
-    justifyContent: 'space-between',
     paddingBottom: hp("5%")
   },
 

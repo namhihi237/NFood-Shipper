@@ -67,7 +67,8 @@ const styles = StyleSheet.create({
   },
   pointContainer: {
     height: 50,
-    backgroundColor: '#7f7f7f', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 30, borderRadius: 10
+    marginTop: 10,
+    backgroundColor: '#d7d9db', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 30, borderRadius: 10
   }
 
 });

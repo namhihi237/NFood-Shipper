@@ -6,27 +6,36 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { useMutation } from '@apollo/client';
+import { useMutation, useSubscription } from '@apollo/client';
 
-import { Text, Button, Box, View, Modal } from "native-base";
-import { GPSUtils } from "../utils";
-import { InputField, ButtonCustom, Toast, Loading, Search, Cart } from './index';
-import { MUTATION } from "../graphql";
+import { Text, Button, Center, View, Modal, HStack, VStack } from "native-base";
+import { GPSUtils, moneyUtils } from "../utils";
+import { MUTATION, SUBSCRIPTION } from "../graphql";
 const TabBar = ({ state, descriptors, navigation }) => {
 
   const [count, setCount] = React.useState(0);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [isGPS, setIsGPS] = React.useState(false);
+  const [showModal, setShowModal] = React.useState(false)
+
+  const [timeHideOrder, setTimeHideOrder] = React.useState(0);
 
   const [updateLocationShipper] = useMutation(MUTATION.UPDATE_LOCATION, {
-    onError: (error) => {
-      console.log(error);
+  });
+
+  const { data } = useSubscription(SUBSCRIPTION.GET_ORDER_SHIPPING, {
+    onSubscriptionData: ({ client, subscriptionData }) => {
+      const { orderShipping } = subscriptionData.data;
+      if (orderShipping) {
+        console.log('orderShipping', orderShipping);
+        setShowModal(true);
+        setTimeHideOrder(25);
+      }
     },
   });
 
   const getLocation = async () => {
     try {
-
       const status = await GPSUtils.requestPermission();
       if (status === 'already-enabled') {
         setModalVisible(false);
@@ -49,6 +58,20 @@ const TabBar = ({ state, descriptors, navigation }) => {
   }
 
   React.useEffect(() => {
+    if (!timeHideOrder) {
+      return;
+    }
+    const interval = setInterval(() => {
+      setTimeHideOrder(timeHideOrder - 1);
+      if (timeHideOrder === 1) {
+        setShowModal(false);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timeHideOrder]);
+
+
+  React.useEffect(() => {
     getLocation();
   }, []);
 
@@ -67,8 +90,6 @@ const TabBar = ({ state, descriptors, navigation }) => {
         setIsGPS(false);
       }
     }, 10000);
-
-    // clear setTimeout
     return () => {
       clearTimeout();
     };
@@ -99,6 +120,54 @@ const TabBar = ({ state, descriptors, navigation }) => {
         </Modal.Content>
       </Modal>
     )
+  }
+
+  const renderModelShippingOrder = () => {
+    return (<Modal isOpen={showModal} onClose={() => setShowModal(false)} size="lg" closeOnOverlayClick={false}>
+      <Modal.Content maxWidth="350">
+        <Modal.Header>{timeHideOrder > 0 ? `Đơn hàng hết hạn sau ${timeHideOrder} s` : null}</Modal.Header>
+        <Modal.Body>
+          <VStack space={4}>
+            <HStack alignItems="center" justifyContent="space-between">
+              <Text fontWeight="medium">Tổng phụ</Text>
+              <Text color="blueGray.400">{moneyUtils.convertVNDToString(data?.orderShipping.subTotal)} đ</Text>
+            </HStack>
+            <HStack alignItems="center" justifyContent="space-between">
+              <Text fontWeight="medium">Phí giao hàng</Text>
+              <Text color="blueGray.400">{moneyUtils.convertVNDToString(data?.orderShipping.shipping)} đ</Text>
+            </HStack>
+            <HStack alignItems="center" justifyContent="space-between">
+              <Text fontWeight="medium">Giảm giá</Text>
+              <Text color="blueGray.400">{moneyUtils.convertVNDToString(data?.orderShipping.discount)} đ</Text>
+            </HStack>
+            <HStack alignItems="center" justifyContent="space-between">
+              <Text fontWeight="medium">Tổng cộng</Text>
+              <Text color="green.500">{moneyUtils.convertVNDToString(data?.orderShipping.total)} đ</Text>
+            </HStack>
+          </VStack>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button.Group space={2}>
+            <Button
+              variant="ghost"
+              colorScheme="blueGray"
+              onPress={() => {
+                setShowModal(false)
+              }}
+            >
+              Hủy
+            </Button>
+            <Button
+              onPress={() => {
+                setShowModal(false)
+              }}
+            >
+              Nhận
+            </Button>
+          </Button.Group>
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal>)
   }
 
   return (
@@ -143,6 +212,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
         );
       })}
       {!isGPS ? renderOpenGPS() : null}
+      {renderModelShippingOrder()}
     </View>
   );
 };
