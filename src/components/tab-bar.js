@@ -12,7 +12,7 @@ import { Text, Button, Center, View, Modal, HStack, VStack } from "native-base";
 import { GPSUtils, moneyUtils } from "../utils";
 import { MUTATION, SUBSCRIPTION } from "../graphql";
 import { useRecoilState } from 'recoil';
-import {locationGPS} from "../recoil"
+import { locationGPS } from "../recoil"
 const TabBar = ({ state, descriptors, navigation }) => {
 
   const [count, setCount] = React.useState(0);
@@ -27,16 +27,16 @@ const TabBar = ({ state, descriptors, navigation }) => {
   const [updateLocationShipper] = useMutation(MUTATION.UPDATE_LOCATION, {
   });
 
-  const { data } = useSubscription(SUBSCRIPTION.GET_ORDER_SHIPPING, {
-    onSubscriptionData: ({ client, subscriptionData }) => {
-      const { orderShipping } = subscriptionData.data;
-      if (orderShipping) {
-        console.log('orderShipping', orderShipping);
-        setShowModal(true);
-        setTimeHideOrder(25);
-      }
-    },
-  });
+  // const { data } = useSubscription(SUBSCRIPTION.GET_ORDER_SHIPPING, {
+  //   onSubscriptionData: ({ client, subscriptionData }) => {
+  //     const { orderShipping } = subscriptionData.data;
+  //     if (orderShipping) {
+  //       console.log('orderShipping', orderShipping);
+  //       setShowModal(true);
+  //       setTimeHideOrder(25);
+  //     }
+  //   },
+  // });
 
   const getLocation = async () => {
     try {
@@ -111,14 +111,12 @@ const TabBar = ({ state, descriptors, navigation }) => {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
           });
-
-          console.log("updated");
         }
       } else {
         setModalVisible(true);
         setIsGPS(false);
       }
-    }, 5000);
+    }, 10000);
     return () => {
       clearTimeout();
     };
@@ -241,7 +239,7 @@ const TabBar = ({ state, descriptors, navigation }) => {
         );
       })}
       {!isGPS ? renderOpenGPS() : null}
-      {renderModelShippingOrder()}
+      {/* {renderModelShippingOrder()} */}
     </View>
   );
 };

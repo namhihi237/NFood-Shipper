@@ -15,5 +15,40 @@ export default {
       name
       isShippingOrder
     }
+  }`,
+
+  GET_ORDERS_PENDING: gql`query GetOrderByDistances {
+    getOrderByDistances {
+      _id
+      name
+      invoiceNumber
+      subTotal
+      shipping
+      discount
+      total
+      orderItems {
+        _id
+        price
+        quantity
+        name
+        image
+        buyerName
+        note
+      }
+      address
+      phoneNumber
+      paymentStatus
+      orderStatus
+      vendor {
+        name
+        location {
+          coordinates
+        }
+        address
+      }
+      estimatedDeliveryTime
+      vendorId
+      createdAt
+    }
   }`
 };

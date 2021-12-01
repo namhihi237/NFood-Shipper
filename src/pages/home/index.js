@@ -1,4 +1,3 @@
-import { Text, Button, View, Switch } from "native-base";
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Image, ScrollView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -10,13 +9,17 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { InputField, ButtonCustom, Toast, Loading, Header } from '../../components';
 import { SCREEN } from "../../constants";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { timeUtils, GPSUtils } from "../../utils";
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { timeUtils, GPSUtils, moneyUtils } from "../../utils";
+import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
+
+import { Text, Button, Switch, View, Modal, HStack, VStack } from "native-base";
 export default function Home(props) {
 
   const [isShippingOrder, setIsShippingOrder] = useState(false);
+  const [showModal, setShowModal] = React.useState(false)
+  const [order, setOrder] = React.useState(null);
   const [location, setLocation] = useRecoilState(locationGPS);
-  const [region, setRegion] = useState(null);
+
 
   const { data } = useQuery(QUERY.GET_USER_INFO, {
     variables: { role: 'shipper' },
@@ -28,18 +31,83 @@ export default function Home(props) {
     }
   });
 
-  useEffect(async () => {
-    const location_g = await GPSUtils.getCurrentPosition();
-    if (location_g) {
-      setRegion({
-        latitude: location_g.coords.latitude,
-        longitude: location_g.coords.longitude,
-        latitudeDelta: 0.1022,
-        longitudeDelta: 0.0721,
+  const { data: orders } = useQuery(QUERY.GET_ORDERS_PENDING, {
+    pollInterval: 5000,
+    fetchPolicy: 'network-only'
+  });
+
+  const renderOrderOnMap = () => {
+    if (orders.getOrderByDistances) {
+      return orders.getOrderByDistances.map((order, index) => {
+        // convert location coords to object
+        const location = {
+          latitude: order.vendor.location.coordinates[1],
+          longitude: order.vendor.location.coordinates[0]
+        }
+        return (<Marker
+          key={index}
+          centerOffset={{ x: 25, y: 25 }}
+          anchor={{ x: 0.5, y: 0.5 }}
+          coordinate={location}
+          title={order.vendor.name}
+          onPress={() => {
+            setOrder(order);
+            setShowModal(true);
+          }}
+        >
+          <Image source={require('../../../assets/images/struck.png')} style={{ height: 35, width: 35 }} />
+        </Marker>)
       });
     }
-  }, []);
+  }
 
+  const renderModalShippingOrder = () => {
+    return (<Modal isOpen={showModal} onClose={() => setShowModal(false)} size="lg" closeOnOverlayClick={false}>
+      <Modal.Content maxWidth="350">
+        <Modal.Header>Order</Modal.Header>
+        <Modal.Body>
+          <VStack space={4}>
+            <HStack alignItems="center" justifyContent="space-between">
+              <Text fontWeight="medium">Tổng phụ</Text>
+              <Text color="blueGray.400">{moneyUtils.convertVNDToString(order?.subTotal)} đ</Text>
+            </HStack>
+            <HStack alignItems="center" justifyContent="space-between">
+              <Text fontWeight="medium">Phí giao hàng</Text>
+              <Text color="blueGray.400">{moneyUtils.convertVNDToString(order?.shipping)} đ</Text>
+            </HStack>
+            <HStack alignItems="center" justifyContent="space-between">
+              <Text fontWeight="medium">Giảm giá</Text>
+              <Text color="blueGray.400">{moneyUtils.convertVNDToString(order?.discount)} đ</Text>
+            </HStack>
+            <HStack alignItems="center" justifyContent="space-between">
+              <Text fontWeight="medium">Tổng cộng</Text>
+              <Text color="green.500">{moneyUtils.convertVNDToString(order?.total)} đ</Text>
+            </HStack>
+          </VStack>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button.Group space={2}>
+            <Button
+              variant="ghost"
+              colorScheme="blueGray"
+              onPress={() => {
+                setShowModal(false)
+              }}
+            >
+              Hủy
+            </Button>
+            <Button
+              onPress={() => {
+                setShowModal(false)
+              }}
+            >
+              Nhận
+            </Button>
+          </Button.Group>
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal>)
+  }
 
   const navigation = useNavigation();
   return (
@@ -73,26 +141,27 @@ export default function Home(props) {
         </View>
       </View>
       <View style={{ backgroundColor: 'red', height: hp("65%") }}>
-        {region && (<MapView
-          initialRegion={region}
+        <MapView
+          initialRegion={{
+            latitude: 16.076,
+            longitude: 108.14894,
+            latitudeDelta: 0.1022,
+            longitudeDelta: 0.0721,
+          }}
           provider={PROVIDER_GOOGLE}
           style={{ flex: 1 }}
           showsTraffic={false}
           showsBuildings={false}
           showsUserLocation={true}
           minZoomLevel={5}
+          showsPointsOfInterest={false}
+          showsCompass={false}
         >
-          {/* {location.latitude && location.longitude ? (<MapView.Marker
-            key={1}
-            centerOffset={{ x: 25, y: 25 }}
-            anchor={{ x: 0.5, y: 0.5 }}
-            coordinate={location}
-            title={`Tôi`}
-          >
-            <Image source={require('../../../assets/images/struck.png')} style={{ height: 35, width: 35 }} />
-          </MapView.Marker>) : null} */}
-        </MapView>)}
+          {orders ? renderOrderOnMap() : null}
+          {location ? <Circle center={location} radius={1000} /> : null}
+        </MapView>
       </View>
+      {order ? renderModalShippingOrder() : null}
     </View>
   );
 }
