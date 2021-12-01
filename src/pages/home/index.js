@@ -158,7 +158,7 @@ export default function Home(props) {
           showsCompass={false}
         >
           {orders ? renderOrderOnMap() : null}
-          {location ? <Circle center={location} radius={1000} /> : null}
+          {location.latitude && location.longitude ? <Circle center={location} radius={1000} /> : null}
         </MapView>
       </View>
       {order ? renderModalShippingOrder() : null}
