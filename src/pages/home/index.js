@@ -6,16 +6,17 @@ import { useNavigation } from '@react-navigation/native';
 import { useMutation, useLazyQuery, useQuery } from '@apollo/client';
 import { MUTATION, QUERY } from '../../graphql';
 import { locationGPS } from "../../recoil";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { InputField, ButtonCustom, Toast, Loading, Header } from '../../components';
 import { SCREEN } from "../../constants";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { timeUtils } from "../../utils";
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import { timeUtils, GPSUtils } from "../../utils";
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 export default function Home(props) {
 
   const [isShippingOrder, setIsShippingOrder] = useState(false);
   const [location, setLocation] = useRecoilState(locationGPS);
+  const [region, setRegion] = useState(null);
 
   const { data } = useQuery(QUERY.GET_USER_INFO, {
     variables: { role: 'shipper' },
@@ -26,6 +27,19 @@ export default function Home(props) {
       }
     }
   });
+
+  useEffect(async () => {
+    const location_g = await GPSUtils.getCurrentPosition();
+    if (location_g) {
+      setRegion({
+        latitude: location_g.coords.latitude,
+        longitude: location_g.coords.longitude,
+        latitudeDelta: 0.1022,
+        longitudeDelta: 0.0721,
+      });
+    }
+  }, []);
+
 
   const navigation = useNavigation();
   return (
@@ -58,18 +72,17 @@ export default function Home(props) {
           />
         </View>
       </View>
-      <View style={{backgroundColor: 'red', height: hp("65%")}}>
-        <MapView
-          initialRegion={{
-            latitude: location.latitude ? location.latitude : 16.0764886,
-            longitude: location.longitude ? location.longitude : 108.14978387,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
+      <View style={{ backgroundColor: 'red', height: hp("65%") }}>
+        {region && (<MapView
+          initialRegion={region}
           provider={PROVIDER_GOOGLE}
           style={{ flex: 1 }}
+          showsTraffic={false}
+          showsBuildings={false}
+          showsUserLocation={true}
+          minZoomLevel={5}
         >
-          {location.latitude && location.longitude ? (<MapView.Marker
+          {/* {location.latitude && location.longitude ? (<MapView.Marker
             key={1}
             centerOffset={{ x: 25, y: 25 }}
             anchor={{ x: 0.5, y: 0.5 }}
@@ -77,8 +90,8 @@ export default function Home(props) {
             title={`Tôi`}
           >
             <Image source={require('../../../assets/images/struck.png')} style={{ height: 35, width: 35 }} />
-          </MapView.Marker>) : null}
-        </MapView>
+          </MapView.Marker>) : null} */}
+        </MapView>)}
       </View>
     </View>
   );
