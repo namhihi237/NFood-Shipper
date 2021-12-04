@@ -9,4 +9,5 @@ export default {
   WALLET: 'wallet',
   ORDER: 'order',
   ACTIVE_SHIPPER: 'activeShipper',
+  ORDER_SHIPPING: 'orderShipping',
 }

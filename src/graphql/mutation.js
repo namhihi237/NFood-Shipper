@@ -45,5 +45,45 @@ export default {
 
   ACTIVE_SHIPPER_ORDER: gql`mutation Mutation {
     activeShippingOrder
+  }`,
+
+  ACCEPT_RECEIVE_SHIPPER_ORDER: gql`mutation AcceptShippingOrder($orderId: ID!) {
+    acceptShippingOrder(orderId: $orderId) {
+    _id
+    address
+      invoiceNumber
+      subTotal
+      shipping
+      discount
+      total
+      orderItems {
+        _id
+        price
+        quantity
+        name
+        image
+        note
+      }
+      phoneNumber
+      name
+      estimatedDeliveryTime
+      paymentStatus
+      orderStatus
+      createdAt
+      vendor {
+        name
+        location {
+          coordinates
+        }
+        address
+      }
+    }
+  }`,
+  PICK_UP_SHIPPER_ORDER: gql`mutation PickUpOrder($orderId: ID!) {
+    pickUpOrder(orderId: $orderId)
+  }`,
+
+  COMPLETE_SHIPPER_ORDER: gql`mutation CompleteShippingOrder($orderId: ID!) {
+    completeShippingOrder(orderId: $orderId)
   }`
 }

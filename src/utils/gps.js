@@ -48,7 +48,6 @@ class GPS {
           resolve(position);
         },
         (error) => {
-          console.log(error);
           resolve(null);
         },
         this.options,

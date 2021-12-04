@@ -7,6 +7,7 @@ import AuthPhone from "./auth-phone";
 import Wallet from "./wallet";
 import Order from "./order";
 import ActiveShipper from "./active-shipper";
+import OrderShipping from "./order-shipping";
 
 export {
   Register,
@@ -17,5 +18,6 @@ export {
   AuthPhone,
   Wallet,
   Order,
-  ActiveShipper
+  ActiveShipper,
+  OrderShipping
 };

@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     paddingHorizontal: wp('5%'),
-    backgroundColor: '#959ba4',
+    backgroundColor: '#F24F04',
   },
   buttonTitle: {
     flexDirection: 'row',

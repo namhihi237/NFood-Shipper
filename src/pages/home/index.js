@@ -31,9 +31,27 @@ export default function Home(props) {
     }
   });
 
+  const [activeReceiveOrder] = useMutation(MUTATION.ACTIVE_SHIPPER_ORDER, {
+    onCompleted: (data) => {
+      setIsShippingOrder(data.activeShippingOrder);
+    }
+  });
+
   const { data: orders } = useQuery(QUERY.GET_ORDERS_PENDING, {
     pollInterval: 5000,
     fetchPolicy: 'network-only'
+  });
+
+
+  const [acceptReceiveShipperOrder] = useMutation(MUTATION.ACCEPT_RECEIVE_SHIPPER_ORDER, {
+    onCompleted: (data) => {
+      navigation.navigate(SCREEN.ORDER_SHIPPING, {
+        order: data.acceptShippingOrder
+      });
+    },
+    onError: (error) => {
+      Toast(error.message, 'danger', 'top-right');
+    }
   });
 
   const renderOrderOnMap = () => {
@@ -91,14 +109,15 @@ export default function Home(props) {
               variant="ghost"
               colorScheme="blueGray"
               onPress={() => {
-                setShowModal(false)
+                setShowModal(false);
               }}
             >
               Hủy
             </Button>
             <Button
               onPress={() => {
-                setShowModal(false)
+                setShowModal(false);
+                acceptReceiveShipperOrder({ variables: { orderId: order?._id } });
               }}
             >
               Nhận
@@ -135,7 +154,7 @@ export default function Home(props) {
             size="lg"
             isChecked={isShippingOrder}
             onToggle={() => {
-              setIsShippingOrder(!isShippingOrder);
+              activeReceiveOrder()
             }}
           />
         </View>
