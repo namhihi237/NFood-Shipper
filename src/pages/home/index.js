@@ -46,7 +46,7 @@ export default function Home(props) {
   const [acceptReceiveShipperOrder] = useMutation(MUTATION.ACCEPT_RECEIVE_SHIPPER_ORDER, {
     onCompleted: (data) => {
       navigation.navigate(SCREEN.ORDER_SHIPPING, {
-        order: data.acceptShippingOrder
+        orderId: data.acceptShippingOrder._id
       });
     },
     onError: (error) => {

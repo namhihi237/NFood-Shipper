@@ -35,10 +35,10 @@ export default function OrderShipping(props) {
 
 
   const renderItem = () => {
-    const orders = route.params?.order?.orderItems || [];
-    return orders.map((item, index) => {
+    const orderItems = data.getOrderById.orderItems || [];
+    return orderItems.map((item, index) => {
       return (
-        <HStack mt="2" mb="2" alignItems="center" justifyContent="space-between" >
+        <HStack mt="2" mb="2" alignItems="center" justifyContent="space-between" key={index}>
           <View flex="4"><Text>{item?.name}</Text></View>
           <Center flex="1"><Text >{item?.quantity}</Text></Center>
           <View flex="2" justifyContent='space-between' flexDirection='row'>
@@ -48,6 +48,20 @@ export default function OrderShipping(props) {
       );
     });
   }
+
+  const { data } = useQuery(QUERY.GET_ORDER_BY_ID, {
+    variables: {
+      id: route.params.orderId
+    },
+    onCompleted: (data) => {
+      console.log(data);
+      if (data.getOrderById.orderStatus === 'Processing') {
+        setTitleButton(buttonTitle.RECEIVED_ORDER);
+      } else {
+        setTitleButton(buttonTitle.DELIVERED_ORDER);
+      }
+    },
+  })
 
   const [pickUpOrder, { loading }] = useMutation(MUTATION.PICK_UP_SHIPPER_ORDER, {
     onCompleted: (data) => {
@@ -72,13 +86,13 @@ export default function OrderShipping(props) {
     if (titleButton.value === buttonTitle.RECEIVED_ORDER.value) {
       pickUpOrder({
         variables: {
-          orderId: route.params.order._id
+          orderId: route.params.orderId
         }
       });
     } else {
       completeShippingOrder({
         variables: {
-          orderId: route.params.order._id
+          orderId: route.params.orderId
         }
       })
     }
@@ -86,26 +100,26 @@ export default function OrderShipping(props) {
   }
 
   const renderNumberOfItems = () => {
-    const orders = route.params?.order?.orderItems || [];
-    return orders.reduce((sum, item) => sum + item.quantity, 0);
+    const orderItems = data.getOrderById?.orderItems || [];
+    return orderItems.reduce((sum, item) => sum + item.quantity, 0);
   }
 
 
   return (
     <View style={styles.mainContainer}>
-      <Header title={"Chi tiết đơn giao"} />
-      <ScrollView style={styles.content}>
+      <Header title={"Chi tiết đơn giao"} onPress={() => navigation.navigate(SCREEN.HOME)} icon={"arrow-left"} />
+      {data ? (<ScrollView style={styles.content}>
         <View style={{ minHeight: hp('80%') }}>
-          <Center><Text bold fontSize="lg" mt="2">{route.params.order.invoiceNumber}</Text></Center>
+          <Center><Text bold fontSize="lg" mt="2">{data.getOrderById.invoiceNumber}</Text></Center>
           <View style={{ marginHorizontal: wp('4%') }}>
-            <Text fontSize="md">Quán: {route.params.order?.vendor?.name}</Text>
-            <Text fontSize="md">Địa chỉ: {route.params.order?.vendor?.address}</Text>
+            <Text fontSize="md">Quán: {data.getOrderById?.vendor?.name}</Text>
+            <Text fontSize="md">Địa chỉ: {data.getOrderById?.vendor?.address}</Text>
           </View>
 
           <View mt="2" style={{ marginHorizontal: wp('4%') }}>
-            <Text fontSize="md">Người nhận: {'Anh Nam'}</Text>
-            <Text fontSize="md">Địa chỉ: {route.params.order.address}</Text>
-            <Text fontSize="md">SĐT: {route.params.order.phoneNumber}</Text>
+            <Text fontSize="md">Người nhận: {data.getOrderById.name}</Text>
+            <Text fontSize="md">Địa chỉ: {data.getOrderById.address}</Text>
+            <Text fontSize="md">SĐT: {data.getOrderById.phoneNumber}</Text>
           </View>
 
           <View bg="#fff" style={{ paddingHorizontal: wp('4%') }}>
@@ -123,27 +137,27 @@ export default function OrderShipping(props) {
             <View style={{ paddingBottom: 10 }}>
               <HStack mt="2" alignItems="center" justifyContent="space-between" >
                 <Text fontSize="md" bold >Tổng phụ</Text>
-                <Text fontSize="md" bold >{moneyUtils.convertVNDToString(route.params.order.subTotal)} đ</Text>
+                <Text fontSize="md" bold >{moneyUtils.convertVNDToString(data.getOrderById.subTotal)} đ</Text>
               </HStack>
 
               <HStack mt="2" alignItems="center" justifyContent="space-between" >
                 <Text fontSize="md" bold >Phí vận chuyển</Text>
-                <Text fontSize="md" bold >{moneyUtils.convertVNDToString(route.params.order.shipping)} đ</Text>
+                <Text fontSize="md" bold >{moneyUtils.convertVNDToString(data.getOrderById.shipping)} đ</Text>
               </HStack>
 
               <HStack mt="2" alignItems="center" justifyContent="space-between" >
                 <Text fontSize="md" bold >Giảm giá</Text>
-                <Text fontSize="md" bold >- {moneyUtils.convertVNDToString(route.params.order.discount)} đ</Text>
+                <Text fontSize="md" bold >- {moneyUtils.convertVNDToString(data.getOrderById.discount)} đ</Text>
               </HStack>
 
               <HStack mt="2" alignItems="center" justifyContent="space-between" >
                 <Text fontSize="md" bold >Tổng tiền</Text>
-                <Text fontSize="md" bold >{moneyUtils.convertVNDToString(route.params.order.total)} đ</Text>
+                <Text fontSize="md" bold >{moneyUtils.convertVNDToString(data.getOrderById.total)} đ</Text>
               </HStack>
             </View>
           </View>
         </View>
-      </ScrollView>
+      </ScrollView>) : null}
       <View style={{ backgroundColor: '#fff', paddingTop: 10 }}>
         <TouchableWithoutFeedback onPress={() => setIsOpen(true)}>
           <View style={styles.button}>

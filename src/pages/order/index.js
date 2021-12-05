@@ -1,6 +1,6 @@
 import { Text, HStack, Box, View, Pressable, Center } from "native-base";
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, Dimensions, StatusBar, Image, FlatList } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, Dimensions, StatusBar, Image, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useQuery } from '@apollo/client';
@@ -28,7 +28,9 @@ export default function Order(props) {
   useEffect(() => {
     navigation.addListener('focus', () => {
       refetch();
-      setOrders(data.getOrderByShipper);
+      if (data) {
+        setOrders(data.getOrderByShipper);
+      }
     });
   }, []);
 
@@ -48,33 +50,40 @@ export default function Order(props) {
 
   const renderItems = (order) => {
     return (
-      <View>
-        <View style={{ paddingHorizontal: wp('5%'), backgroundColor: '#fff', paddingVertical: 10 }} flexDirection='row'>
-          <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('23%'), height: wp('23%') }} />
-          <View ml='2'>
-            <Text mt='2' bold fontSize='md'>#{order.invoiceNumber}</Text>
-            <View mt='1' style={{ flexDirection: 'row', justifyContent: 'space-between', width: wp('63%') }} >
-              <Text>x {countNumberOfItems(order.orderItems)} (món)</Text>
-              <Text style={{ color: 'red' }}>{moneyUtils.convertVNDToString(order.total)} đ</Text>
-            </View>
+      <TouchableWithoutFeedback onPress={() => {
+        if (order.orderStatus !== 'Processing' && order.orderStatus !== 'Shipping') {
+          // navigation.navigate(SCREEN.ORDER_DETAIL, { orderId: order.id });
+        } else {
+          navigation.navigate(SCREEN.ORDER_SHIPPING, { orderId: order._id });
+        }
+      }}>
+        <View>
+          <View style={{ paddingHorizontal: wp('5%'), backgroundColor: '#fff', paddingVertical: 10 }} flexDirection='row'>
+            <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('23%'), height: wp('23%') }} />
+            <View ml='2'>
+              <Text mt='2' bold fontSize='md'>#{order.invoiceNumber}</Text>
+              <View mt='1' style={{ flexDirection: 'row', justifyContent: 'space-between', width: wp('63%') }} >
+                <Text>x {countNumberOfItems(order.orderItems)} (món)</Text>
+                <Text style={{ color: 'red' }}>{moneyUtils.convertVNDToString(order.total)} đ</Text>
+              </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} mt='2'>
-              <Text color={orderUtils.orderStatusColor(order.orderStatus)}>
-                {orderUtils.orderStatus(order.orderStatus)}
-              </Text>
-              <Text>{order.deliveredAt}</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} mt='2'>
+                <Text color={orderUtils.orderStatusColor(order.orderStatus)}>
+                  {orderUtils.orderStatus(order.orderStatus)}
+                </Text>
+                <Text>{order.deliveredAt}</Text>
+              </View>
             </View>
           </View>
+          <View style={{ height: 1 }}></View>
         </View>
-        <View style={{ height: 1 }}></View>
-      </View>
+      </TouchableWithoutFeedback>
     )
   }
 
-
   const renderOrderDelivered = () => {
     if (data) {
-      const deliveredOrders = data.getOrderByShipper.filter(order => order.orderStatus !== 'Pending' && order.orderStatus !== 'Shipping');
+      const deliveredOrders = data.getOrderByShipper.filter(order => order.orderStatus !== 'Processing' && order.orderStatus !== 'Shipping');
       if (deliveredOrders.length === 0) {
         return (
           <View style={{ flex: 1 }}>
@@ -103,13 +112,44 @@ export default function Order(props) {
     }
   }
 
+  const renderDelivering = () => {
+    if (data) {
+      const deliveringOrders = data.getOrderByShipper.filter(order => order.orderStatus === 'Processing' || order.orderStatus === 'Shipping');
+      if (deliveringOrders.length === 0) {
+        return (
+          <View style={{ flex: 1 }}>
+            <Center flex={1}>
+              <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: wp('50%') }} />
+            </Center>
+          </View>
+        )
+      } else {
+        return (
+          <FlatList
+            data={deliveringOrders}
+            renderItem={({ item }) => renderItems(item)}
+            keyExtractor={item => item._id}
+          />
+        )
+      }
+    } else {
+      return (
+        <View style={{ flex: 1 }}>
+          <Center flex={1}>
+            <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: hp('50%') }} />
+          </Center>;
+        </View>
+      )
+    }
+  }
+
   const renderSceneNo = SceneMap({
     first: FirstRoute,
     second: SecondRoute,
   });
 
   const renderScene = SceneMap({
-    first: FirstRoute,
+    first: renderDelivering,
     second: renderOrderDelivered,
   });
 

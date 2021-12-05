@@ -3,21 +3,25 @@ import { useNavigation } from '@react-navigation/native';
 import { View, StyleSheet, TouchableWithoutFeedback, Text } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Button, Switch } from "native-base";
-
 // import { Text } from 'native-base';
 import { storageUtils } from '../utils'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { SCREEN } from '../constants';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const Header = (props) => {
   const navigation = useNavigation();
 
+  const onPress = props.onPress ? props.onPress : () => navigation.navigate(SCREEN.HOME);
+
   return (
     <View style={styles.header}>
-      <Button isLoading></Button>
+      <TouchableWithoutFeedback onPress={onPress}>
+        <FontAwesome5 name={props.icon || "home"} size={wp('5%')} />
+      </TouchableWithoutFeedback>
       <Text style={styles.text}>{props.title}</Text>
 
       <TouchableWithoutFeedback onPress={() => navigation.navigate(SCREEN.NOTIFICATION)}>
-        <FontAwesome5 name="bell" size={wp('5%')} color="white" style={styles.icon} />
+        <FontAwesome5 name="bell" size={wp('5%')} color="white" style={styles.icon || 'home'} />
       </TouchableWithoutFeedback>
     </View>
   );

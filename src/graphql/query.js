@@ -83,5 +83,38 @@ export default {
         address
       }
     }
+  }`,
+
+  GET_ORDER_BY_ID: gql`query GetOrderById($id: ID!) {
+    getOrderById(id: $id) {
+      _id
+      invoiceNumber
+      subTotal
+      shipping
+      discount
+      total
+      orderItems {
+        price
+        quantity
+        name
+        image
+        note
+        buyerName
+      }
+      address
+      phoneNumber
+      name
+      deliveredAt
+      estimatedDeliveryTime
+      paymentStatus
+      orderStatus
+      vendor {
+        name
+        location {
+          coordinates
+        }
+        address
+      }
+    }
   }`
 };
