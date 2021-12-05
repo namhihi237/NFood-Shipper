@@ -159,7 +159,7 @@ export default function Home(props) {
           />
         </View>
       </View>
-      <View style={{ backgroundColor: 'red', height: hp("65%") }}>
+      <View style={{ height: hp("65%") }}>
         <MapView
           initialRegion={{
             latitude: 16.076,
