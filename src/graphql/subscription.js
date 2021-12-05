@@ -19,7 +19,7 @@ export default {
       name
       paymentStatus
       orderStatus
-      deliveryDate
+      deliveredAt
       estimatedDeliveryTime
     }
   }`,

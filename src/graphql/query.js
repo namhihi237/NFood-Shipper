@@ -50,5 +50,38 @@ export default {
       vendorId
       createdAt
     }
+  }`,
+
+  GET_ORDER_BY_SHIPPER: gql`query GetOrderByShipper {
+    getOrderByShipper {
+      _id
+      invoiceNumber
+      subTotal
+      shipping
+      discount
+      total
+      orderItems {
+        _id
+        price
+        quantity
+        name
+        image
+        note
+        buyerName
+      }
+      address
+      phoneNumber
+      name
+      deliveredAt
+      acceptedShippingAt
+      estimatedDeliveryTime
+      paymentStatus
+      orderStatus
+      createdAt
+      vendor {
+        name
+        address
+      }
+    }
   }`
 };
