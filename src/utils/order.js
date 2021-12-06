@@ -21,7 +21,7 @@ class Order {
       case 'Pending':
         return 'orange.600';
       case 'Processing':
-        return 'warning.600';
+        return 'fuchsia.600';
       case 'Shipping':
         return 'info.600';
       case 'Delivered':

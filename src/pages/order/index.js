@@ -5,32 +5,24 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useQuery } from '@apollo/client';
 import { TabView, SceneMap } from 'react-native-tab-view';
-import { InputField, ButtonCustom, Toast, Loading, Header } from '../../components';
+import { Header } from '../../components';
 import { SCREEN } from "../../constants";
 import { QUERY } from "../../graphql";
 import { moneyUtils, orderUtils } from "../../utils";
 
-
-const FirstRoute = () => <Center flex={1}><Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: wp('50%') }} /></Center>
-const SecondRoute = () => <Center flex={1}><Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: wp('50%') }} /></Center>
-
+const FirstRoute = () => <Center flex={1}><Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: wp('55%') }} /></Center>
+const SecondRoute = () => <Center flex={1}><Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: wp('55%') }} /></Center>
 
 const initialLayout = { width: Dimensions.get('window').width };
 
 export default function Order(props) {
 
   const navigation = useNavigation();
-  const [orders, setOrders] = useState([]);
-
   const { data, refetch } = useQuery(QUERY.GET_ORDER_BY_SHIPPER);
-
 
   useEffect(() => {
     navigation.addListener('focus', () => {
       refetch();
-      if (data) {
-        setOrders(data.getOrderByShipper);
-      }
     });
   }, []);
 
@@ -88,7 +80,7 @@ export default function Order(props) {
         return (
           <View style={{ flex: 1 }}>
             <Center flex={1}>
-              <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: wp('50%') }} />
+              <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: wp('55%') }} />
             </Center>
           </View>
         )
@@ -105,7 +97,7 @@ export default function Order(props) {
       return (
         <View style={{ flex: 1 }}>
           <Center flex={1}>
-            <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: hp('50%') }} />
+            <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: hp('55%') }} />
           </Center>;
         </View>
       )
@@ -119,7 +111,7 @@ export default function Order(props) {
         return (
           <View style={{ flex: 1 }}>
             <Center flex={1}>
-              <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: wp('50%') }} />
+              <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: wp('55%') }} />
             </Center>
           </View>
         )
@@ -136,7 +128,7 @@ export default function Order(props) {
       return (
         <View style={{ flex: 1 }}>
           <Center flex={1}>
-            <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: hp('50%') }} />
+            <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('50%'), height: hp('55%') }} />
           </Center>;
         </View>
       )
