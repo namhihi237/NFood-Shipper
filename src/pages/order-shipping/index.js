@@ -53,8 +53,8 @@ export default function OrderShipping(props) {
     variables: {
       id: route.params.orderId
     },
+    fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
-      console.log(data);
       if (data.getOrderById.orderStatus === 'Processing') {
         setTitleButton(buttonTitle.RECEIVED_ORDER);
       } else {
@@ -107,10 +107,10 @@ export default function OrderShipping(props) {
 
   return (
     <View style={styles.mainContainer}>
-      <Header title={"Chi tiết đơn giao"} onPress={() => navigation.navigate(SCREEN.HOME)} icon={"arrow-left"} />
+      <Header title={"Chi tiết đơn giao"} onPress={() => navigation.goBack()} icon={"arrow-left"} />
       {data ? (<ScrollView style={styles.content}>
         <View style={{ minHeight: hp('80%') }}>
-          <Center><Text bold fontSize="lg" mt="2">{data.getOrderById.invoiceNumber}</Text></Center>
+          <Center><Text bold fontSize="lg" mt="2">#{data.getOrderById.invoiceNumber}</Text></Center>
           <View style={{ marginHorizontal: wp('4%') }}>
             <Text fontSize="md">Quán: {data.getOrderById?.vendor?.name}</Text>
             <Text fontSize="md">Địa chỉ: {data.getOrderById?.vendor?.address}</Text>

@@ -85,5 +85,9 @@ export default {
 
   COMPLETE_SHIPPER_ORDER: gql`mutation CompleteShippingOrder($orderId: ID!) {
     completeShippingOrder(orderId: $orderId)
-  }`
+  }`,
+
+  RESET_NUMBER_OF_NOTIFICATIONS: gql`mutation ResetNumberOfNotifications($userType: roleEnum!) {
+    resetNumberOfNotifications(userType: $userType)
+  }`,
 }
