@@ -50,7 +50,7 @@ export default function Notification(props) {
     <View style={styles.container} >
       <Header title="Thông báo" onPress={() => navigation.navigate(SCREEN.HOME)} />
       {
-        data && data.getNotifications && data.getNotifications.length > 0 ? (<FlatList
+        data && data.getNotifications && data.getNotifications.items.length > 0 ? (<FlatList
           style={{}}
           data={data ? data.getNotifications.items : []}
           renderItem={({ item }) => renderItem(item)}
