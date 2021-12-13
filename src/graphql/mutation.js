@@ -90,4 +90,8 @@ export default {
   RESET_NUMBER_OF_NOTIFICATIONS: gql`mutation ResetNumberOfNotifications($userType: roleEnum!) {
     resetNumberOfNotifications(userType: $userType)
   }`,
+
+  UPDATE_MAX_DISTANCE: gql`mutation UpdateMaxDistanceReceiveOrder($maxDistance: Float!) {
+    updateMaxDistanceReceiveOrder(maxDistance: $maxDistance)
+  }`
 }

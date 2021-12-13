@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Image, ScrollView } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useLazyQuery, useQuery } from '@apollo/client';
@@ -12,13 +12,15 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { timeUtils, GPSUtils, moneyUtils } from "../../utils";
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
 
-import { Text, Button, Switch, View, Modal, HStack, VStack } from "native-base";
+import { Text, Button, Switch, View, Modal, Center, Input } from "native-base";
 export default function Home(props) {
 
   const [isShippingOrder, setIsShippingOrder] = useState(false);
   const [showModal, setShowModal] = React.useState(false)
   const [order, setOrder] = React.useState(null);
   const [location, setLocation] = useRecoilState(locationGPS);
+  const [maxDistance, setMaxDistance] = React.useState(0);
+  const [tempMaxDistance, setTempMaxDistance] = React.useState(0);
 
 
   const { data } = useQuery(QUERY.GET_USER_INFO, {
@@ -27,8 +29,10 @@ export default function Home(props) {
     onCompleted: (data) => {
       if (data.getUser) {
         setIsShippingOrder(data.getUser.isShippingOrder);
+        setMaxDistance(data.getMaxDistanceFindOrder);
+        setTempMaxDistance(data.getMaxDistanceFindOrder);
       }
-    }
+    },
   });
 
   const [activeReceiveOrder] = useMutation(MUTATION.ACTIVE_SHIPPER_ORDER, {
@@ -42,12 +46,11 @@ export default function Home(props) {
     fetchPolicy: 'network-only'
   });
 
-
-  const [acceptReceiveShipperOrder] = useMutation(MUTATION.ACCEPT_RECEIVE_SHIPPER_ORDER, {
+  const [updateMaxDistanceReceiveOrder] = useMutation(MUTATION.UPDATE_MAX_DISTANCE, {
+    variables: { maxDistance: tempMaxDistance - 0 },
     onCompleted: (data) => {
-      navigation.navigate(SCREEN.ORDER_SHIPPING, {
-        orderId: data.acceptShippingOrder._id
-      });
+      setShowModal(false);
+      setMaxDistance(tempMaxDistance);
     },
     onError: (error) => {
       Toast(error.message, 'danger', 'top-right');
@@ -78,54 +81,61 @@ export default function Home(props) {
       });
     }
   }
+  const reduceMaxDistance = () => {
+    if (tempMaxDistance > 0.1) {
+      setTempMaxDistance((tempMaxDistance - 0.1).toFixed(1));
+    }
+  }
 
-  const renderModalShippingOrder = () => {
-    return (<Modal isOpen={showModal} onClose={() => setShowModal(false)} size="lg" closeOnOverlayClick={false}>
-      <Modal.Content maxWidth="350">
-        <Modal.Header>Order</Modal.Header>
-        <Modal.Body>
-          <VStack space={4}>
-            <HStack alignItems="center" justifyContent="space-between">
-              <Text fontWeight="medium">Tổng phụ</Text>
-              <Text color="blueGray.400">{moneyUtils.convertVNDToString(order?.subTotal)} đ</Text>
-            </HStack>
-            <HStack alignItems="center" justifyContent="space-between">
-              <Text fontWeight="medium">Phí giao hàng</Text>
-              <Text color="blueGray.400">{moneyUtils.convertVNDToString(order?.shipping)} đ</Text>
-            </HStack>
-            <HStack alignItems="center" justifyContent="space-between">
-              <Text fontWeight="medium">Giảm giá</Text>
-              <Text color="blueGray.400">{moneyUtils.convertVNDToString(order?.discount)} đ</Text>
-            </HStack>
-            <HStack alignItems="center" justifyContent="space-between">
-              <Text fontWeight="medium">Tổng cộng</Text>
-              <Text color="green.500">{moneyUtils.convertVNDToString(order?.total)} đ</Text>
-            </HStack>
-          </VStack>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button.Group space={2}>
-            <Button
-              variant="ghost"
-              colorScheme="blueGray"
-              onPress={() => {
-                setShowModal(false);
-              }}
-            >
-              Hủy
-            </Button>
-            <Button
-              onPress={() => {
-                setShowModal(false);
-                acceptReceiveShipperOrder({ variables: { orderId: order?._id } });
-              }}
-            >
-              Nhận
-            </Button>
-          </Button.Group>
-        </Modal.Footer>
-      </Modal.Content>
-    </Modal>)
+  const increaseMaxDistance = () => {
+    if (tempMaxDistance < 10) {
+      setTempMaxDistance((tempMaxDistance + 0.1).toFixed(1));
+    }
+  }
+
+  const renderModalUpdateDistance = () => {
+    return (
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} closeOnOverlayClick={false}>
+        <Modal.Content maxWidth="400px">
+          <Modal.CloseButton />
+          <Modal.Header>Khoảng cách tối đa nhận đơn</Modal.Header>
+          <Modal.Body>
+            <Center>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: wp('25%') }}>
+                <TouchableOpacity onPress={reduceMaxDistance} style={{ borderWidth: 1, justifyContent: 'center', alignItems: 'center', display: 'flex', width: 27, borderColor: '#F24F04' }}>
+                  <Text bold fontSize="xl">-</Text>
+                </TouchableOpacity>
+                <Text bold fontSize="xl">{tempMaxDistance}</Text>
+                <TouchableOpacity onPress={increaseMaxDistance} style={{ borderWidth: 1, justifyContent: 'center', alignItems: 'center', display: 'flex', width: 27, borderColor: '#F24F04' }}>
+                  <Text bold fontSize="xl">+</Text>
+                </TouchableOpacity>
+              </View>
+            </Center>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="ghost"
+                colorScheme="blueGray"
+                onPress={() => {
+                  setShowModal(false);
+                  setTempMaxDistance(maxDistance);
+                }}
+              >
+                Hủy
+              </Button>
+              <Button
+                onPress={() => {
+                  updateMaxDistanceReceiveOrder();
+                }}
+              >
+                Cập nhật
+              </Button>
+            </Button.Group>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+    )
   }
 
   const navigation = useNavigation();
@@ -157,6 +167,9 @@ export default function Home(props) {
               activeReceiveOrder()
             }}
           />
+          <TouchableOpacity style={styles.maxDistance} onPress={() => setShowModal(true)}>
+            <Text bold>Khoảng cách tối đa: {maxDistance} km</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={{ height: hp("65%") }}>
@@ -177,10 +190,10 @@ export default function Home(props) {
           showsCompass={false}
         >
           {orders ? renderOrderOnMap() : null}
-          {location.latitude && location.longitude ? <Circle center={location} radius={1000} /> : null}
+          {location.latitude && location.longitude ? <Circle center={location} radius={maxDistance * 1000} /> : null}
         </MapView>
       </View>
-      {order ? renderModalShippingOrder() : null}
+      {renderModalUpdateDistance()}
     </View>
   );
 }
@@ -194,6 +207,15 @@ const styles = StyleSheet.create({
     height: 50,
     marginTop: 10,
     backgroundColor: '#d7d9db', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 30, borderRadius: 10
+  },
+  maxDistance: {
+    backgroundColor: '#d7d9db',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 5,
+    borderRadius: 10,
+    marginTop: 10,
+    paddingVertical: 5
   }
 
 });

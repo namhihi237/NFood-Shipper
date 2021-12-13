@@ -15,6 +15,8 @@ export default {
       name
       isShippingOrder
     }
+
+    getMaxDistanceFindOrder
   }`,
 
   GET_ORDERS_PENDING: gql`query GetOrderByDistances {
@@ -133,4 +135,5 @@ export default {
       total
     }
   }`,
+
 };
