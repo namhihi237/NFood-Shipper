@@ -17,11 +17,11 @@ export default function Home(props) {
 
   const [isShippingOrder, setIsShippingOrder] = useState(false);
   const [showModal, setShowModal] = React.useState(false)
-  const [order, setOrder] = React.useState(null);
+  const [showOrderModal, setShowOrderModal] = React.useState(false)
   const [location, setLocation] = useRecoilState(locationGPS);
   const [maxDistance, setMaxDistance] = React.useState(0);
   const [tempMaxDistance, setTempMaxDistance] = React.useState(0);
-
+  const [order, setOrder] = React.useState(null);
 
   const { data } = useQuery(QUERY.GET_USER_INFO, {
     variables: { role: 'shipper' },
@@ -57,6 +57,18 @@ export default function Home(props) {
     }
   });
 
+  const [acceptReceiveShipperOrder] = useMutation(MUTATION.ACCEPT_RECEIVE_SHIPPER_ORDER, {
+    onCompleted: (data) => {
+      navigation.navigate(SCREEN.ORDER_SHIPPING, {
+        order: data.acceptShippingOrder,
+        orderId: data.acceptShippingOrder._id,
+      });
+    },
+    onError: (error) => {
+      Toast(error.message, 'danger', 'top-right');
+    }
+  });
+
   const renderOrderOnMap = () => {
     if (orders.getOrderByDistances) {
       return orders.getOrderByDistances.map((order, index) => {
@@ -73,7 +85,7 @@ export default function Home(props) {
           title={order.vendor.name}
           onPress={() => {
             setOrder(order);
-            setShowModal(true);
+            setShowOrderModal(true);
           }}
         >
           <Image source={require('../../../assets/images/struck.png')} style={{ height: 35, width: 35 }} />
@@ -138,6 +150,46 @@ export default function Home(props) {
     )
   }
 
+  const renderModalOrder = () => {
+    return (
+      <Modal isOpen={showOrderModal} onClose={() => setShowOrderModal(false)} closeOnOverlayClick={false}>
+        <Modal.Content maxWidth="400px">
+          <Modal.CloseButton />
+          <Modal.Header>Đơn hàng cần giao</Modal.Header>
+          <Modal.Body>
+            <Center>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: wp('25%') }}>
+
+              </View>
+            </Center>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="ghost"
+                colorScheme="blueGray"
+                onPress={() => {
+                  setShowOrderModal(false);
+                }}
+              >
+                Hủy
+              </Button>
+              <Button
+                onPress={() => {
+                  acceptReceiveShipperOrder({ variables: { orderId: order?._id } });
+                  setShowOrderModal(false);
+                }}
+              >
+                Nhận đơn
+              </Button>
+            </Button.Group>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+    )
+  }
+
+
   const navigation = useNavigation();
   return (
     <View style={styles.mainContainer}>
@@ -194,6 +246,7 @@ export default function Home(props) {
         </MapView>
       </View>
       {renderModalUpdateDistance()}
+      {renderModalOrder()}
     </View>
   );
 }
