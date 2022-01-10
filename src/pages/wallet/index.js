@@ -14,13 +14,13 @@ export default function Wallet(props) {
     <View style={styles.mainContainer}>
       <Header title={"NFood Shipper"} />
       <View >
-        <View style={styles.incomeContainer}>
+        <TouchableOpacity style={styles.incomeContainer} onPress={() => navigation.navigate(SCREEN.REPORT)}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <FontAwesome5 name="chart-line" size={hp("3.2%")} color="green" />
             <Text ml="4" fontSize="lg">Thống kê thu nhập của bạn</Text>
           </View>
           <FontAwesome5 name="angle-right" size={hp("3.2%")} color="#444251" />
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.reportContainer}>
           <View style={styles.lineReport}>

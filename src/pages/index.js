@@ -8,6 +8,7 @@ import Wallet from "./wallet";
 import Order from "./order";
 import ActiveShipper from "./active-shipper";
 import OrderShipping from "./order-shipping";
+import Report from "./reports";
 
 export {
   Register,
@@ -19,5 +20,6 @@ export {
   Wallet,
   Order,
   ActiveShipper,
-  OrderShipping
+  OrderShipping,
+  Report
 };
