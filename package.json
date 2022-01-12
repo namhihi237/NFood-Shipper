@@ -12,6 +12,7 @@
   "dependencies": {
     "@apollo/client": "^3.4.16",
     "@react-native-async-storage/async-storage": "^1.15.11",
+    "@react-native-community/datetimepicker": "^5.1.0",
     "@react-native-community/geolocation": "^2.0.2",
     "@react-native-masked-view/masked-view": "^0.2.6",
     "@react-navigation/bottom-tabs": "^6.0.9",
@@ -29,6 +30,7 @@
     "react-native-gesture-handler": "^1.10.3",
     "react-native-image-picker": "^4.1.2",
     "react-native-maps": "^0.29.4",
+    "react-native-month-year-picker": "^1.8.0",
     "react-native-pager-view": "^5.4.8",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^3.3.2",

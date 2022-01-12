@@ -144,6 +144,15 @@ export default {
       rewardMoney,
       totalOrder 
     }
+  }`,
+
+  GET_INCOME: gql`query GetIncomesByShipper($type: reportType!, $time: String!) {
+    getIncomesByShipper(type: $type, time: $time) {
+      totalIncome
+      totalShipping
+      rewardPoint
+      totalOrder
+    }
   }`
 
 };

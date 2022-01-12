@@ -13,6 +13,7 @@ import { display, flexDirection } from "styled-system";
 
 export default function ReportInfo(props) {
 
+  const { time, data } = props;
   const navigation = useNavigation();
   return (
     <View style={styles.container}>

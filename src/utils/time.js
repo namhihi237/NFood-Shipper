@@ -8,6 +8,18 @@ class TimeUtils {
   convertDate(date) {
     return moment(date).format('DD/MM/YYYY');
   }
+
+  convertMonthYear(date) {
+    return moment(date).format('MM/YYYY');
+  }
+
+  convertDay(date) {
+    return moment(date).format('YYYY-MM-DD');
+  }
+
+  convertMonth(date) {
+    return moment(date).format('YYYY-MM');
+  }
 }
 
 export default new TimeUtils();
