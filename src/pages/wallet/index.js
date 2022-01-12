@@ -3,13 +3,21 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { InputField, ButtonCustom, Toast, Loading, Header } from '../../components';
+import { QUERY } from "../../graphql";
+import { moneyUtils, orderUtils } from "../../utils";
 import { SCREEN } from "../../constants"
 export default function Wallet(props) {
 
   const navigation = useNavigation();
+
+  const { data } = useQuery(QUERY.GET_REPORT, {
+  });
+
+
   return (
     <View style={styles.mainContainer}>
       <Header title={"NFood Shipper"} />
@@ -25,27 +33,27 @@ export default function Wallet(props) {
         <View style={styles.reportContainer}>
           <View style={styles.lineReport}>
             <Text fontSize="md">Tiền giao hàng</Text>
-            <Text color="#F24F04" fontSize="md">0 đ</Text>
+            <Text color="#F24F04" fontSize="md">{moneyUtils.convertVNDToString(data?.getReportsByShipper?.deliveryMoney)} đ</Text>
           </View>
           <View style={styles.line}></View>
           <View style={styles.lineReport}>
             <Text fontSize="md">Tổng mua hàng</Text>
-            <Text color="#F24F04" fontSize="md">0 đ</Text>
+            <Text color="#F24F04" fontSize="md">{moneyUtils.convertVNDToString(data?.getReportsByShipper?.buyOrderMoney)} đ</Text>
           </View>
           <View style={styles.line}></View>
           <View style={styles.lineReport}>
             <Text fontSize="md">Tiền thưởng</Text>
-            <Text color="#F24F04" fontSize="md">0 đ</Text>
+            <Text color="#F24F04" fontSize="md">{moneyUtils.convertVNDToString(data?.getReportsByShipper?.rewardMoney)} đ</Text>
           </View>
           <View style={styles.line}></View>
           <View style={styles.lineReport}>
             <Text fontSize="md">Số dư trong ví</Text>
-            <Text color="#F24F04" fontSize="md">0 đ</Text>
+            <Text color="#F24F04" fontSize="md">{moneyUtils.convertVNDToString(data?.getReportsByShipper?.balanceWallet)} đ</Text>
           </View>
           <View style={styles.line}></View>
           <View style={styles.lineReport}>
-            <Text fontSize="md" bold>Tổng cộng</Text>
-            <Text color="#F24F04" fontSize="md" bold>0 đ</Text>
+            <Text fontSize="md" >Tổng đơn đã giao</Text>
+            <Text color="#F24F04" fontSize="md" >{data?.getReportsByShipper?.totalOrder}</Text>
           </View>
         </View>
 

@@ -136,4 +136,14 @@ export default {
     }
   }`,
 
+  GET_REPORT: gql`query GetReportsByShipper {
+    getReportsByShipper {
+      deliveryMoney
+      buyOrderMoney
+      balanceWallet
+      rewardMoney,
+      totalOrder 
+    }
+  }`
+
 };
