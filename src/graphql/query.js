@@ -160,6 +160,30 @@ export default {
       rewardPoint
       totalOrder
     }
-  }`
+  }`,
 
+
+  GET_REVIEWS: gql`query GetReviews($type: reviewEnum!) {
+    getReviews(type: $type) {
+      reviews {
+        buyerId
+        _id
+        rating
+        comment
+        image
+        buyer {
+          _id
+          name
+          image
+          phoneNumber
+        }
+        reviewedId
+        type
+        createdAt
+      }
+      badReviews
+      goodReviews
+      normalReviews
+    }
+  }`
 };

@@ -49,7 +49,7 @@ export default function Store(props) {
           <Text fontSize="md" color="#be123c" bold>{moneyUtils.convertVNDToString(4000)} đ/km</Text>
         </View>
 
-        <TouchableOpacity style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate(SCREEN.REVIEW)}>
           <Text fontSize="md" mr="4">Xem đánh giá</Text>
           <FontAwesome5 name="angle-right" size={20} color="#0369a1" />
         </TouchableOpacity>

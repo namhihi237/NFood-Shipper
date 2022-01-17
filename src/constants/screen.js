@@ -11,4 +11,5 @@ export default {
   ACTIVE_SHIPPER: 'activeShipper',
   ORDER_SHIPPING: 'orderShipping',
   REPORT: 'report',
+  REVIEW: 'review',
 }

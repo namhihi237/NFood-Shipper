@@ -9,6 +9,7 @@ import Order from "./order";
 import ActiveShipper from "./active-shipper";
 import OrderShipping from "./order-shipping";
 import Report from "./reports";
+import Review from "./reviews";
 
 export {
   Register,
@@ -21,5 +22,6 @@ export {
   Order,
   ActiveShipper,
   OrderShipping,
-  Report
+  Report,
+  Review
 };
