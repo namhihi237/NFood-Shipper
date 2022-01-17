@@ -14,6 +14,13 @@ export default {
       coordinates
       name
       isShippingOrder
+      identityCard {
+        beforeImage
+        afterImage
+        number
+        place
+        date
+      }
     }
 
     getMaxDistanceFindOrder
