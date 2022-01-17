@@ -63,7 +63,7 @@ export default function Review(props) {
 
   return (
     <View style={styles.container} >
-      <Header title={"Đánh giá của khách hàng"} />
+      <Header title={"Đánh giá của khách hàng"} icon="arrow-left" onPress={() => navigation.goBack()} />
       <View style={styles.summary}>
         <View style={styles.iconButton}>
           <Image source={require('../../../assets/images/bad.png')} style={styles.icon} />
