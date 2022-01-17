@@ -38,6 +38,14 @@ class Storage {
       return null;
     }
   }
+
+  async removeItem(key) {
+    try {
+      await AsyncStorage.removeItem(key)
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 export default new Storage();

@@ -2,13 +2,13 @@ import { Text, Box, View, Switch } from "native-base";
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView, Image, TouchableWithoutFeedback } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation, useQuery } from '@apollo/client';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { InputField, ButtonCustom, Toast, Loading, Header } from '../../components';
 import { SCREEN } from "../../constants";
 import { QUERY, client } from '../../graphql';
-import { moneyUtils } from '../../utils';
+import { moneyUtils, storageUtils } from '../../utils';
 
 const noImage = "https://res.cloudinary.com/do-an-cnpm/image/upload/v1637807216/user_ilxv1x.png";
 const noUpdate = 'Chưa cập nhật';
@@ -21,6 +21,15 @@ export default function Store(props) {
     },
     fetchPolicy: 'cache-and-network',
   });
+
+
+  const logOut = async () => {
+    await storageUtils.removeItem("token");
+    await storageUtils.removeItem("phoneNumber");
+    await storageUtils.removeItem("password");
+    navigation.navigate(SCREEN.LOGIN, { clear: true });
+  }
+
   const navigation = useNavigation();
   return (
     <View style={styles.mainContainer}>
@@ -36,7 +45,7 @@ export default function Store(props) {
                 <Text color="#0369a1">Đổi mật khẩu</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.logOut}>
+            <TouchableOpacity style={styles.logOut} onPress={logOut}>
               <Text color="#0369a1">
                 Đăng xuất
               </Text>

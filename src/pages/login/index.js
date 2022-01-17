@@ -2,7 +2,7 @@ import { Text, Image, Box, View, Switch } from "native-base";
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import { MUTATION } from "../../graphql";
 import { InputField, ButtonCustom, Toast, Loading } from '../../components';
@@ -11,6 +11,7 @@ import { storageUtils } from "../../utils"
 export default function Login(props) {
 
   const navigation = useNavigation();
+  const route = useRoute();
 
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
@@ -45,8 +46,14 @@ export default function Login(props) {
     }
   };
 
-  useEffect(() => {
-    getCheck();
+  React.useEffect(() => {
+    navigation.addListener('focus', () => {
+      getCheck();
+
+      if (route?.params?.clear) {
+        setPassword('');
+      }
+    });
   }, []);
 
 
