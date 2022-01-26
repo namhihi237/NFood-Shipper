@@ -10,6 +10,7 @@ import ActiveShipper from "./active-shipper";
 import OrderShipping from "./order-shipping";
 import Report from "./reports";
 import Review from "./reviews";
+import { CheckCode, Forgot, UpdatePassword } from "./forgot-password";
 
 export {
   Register,
@@ -23,5 +24,8 @@ export {
   ActiveShipper,
   OrderShipping,
   Report,
-  Review
+  Review,
+  CheckCode,
+  Forgot,
+  UpdatePassword
 };

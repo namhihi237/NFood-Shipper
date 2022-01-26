@@ -93,5 +93,17 @@ export default {
 
   UPDATE_MAX_DISTANCE: gql`mutation UpdateMaxDistanceReceiveOrder($maxDistance: Float!) {
     updateMaxDistanceReceiveOrder(maxDistance: $maxDistance)
+  }`,
+
+  FORGOT_PASSWORD: gql`mutation ForgotPassword($phoneNumber: String!) {
+    forgotPassword(phoneNumber: $phoneNumber)
+  }`,
+
+  VERIFY_CODE: gql`mutation VerifyCode($code: String!, $phoneNumber: String!) {
+    verifyCode(code: $code, phoneNumber: $phoneNumber)
+  }`,
+
+  UPDATE_PASSWORD: gql`mutation UpdatePassword($password: String!, $code: String!) {
+    updatePassword(password: $password, code: $code)
   }`
 }

@@ -123,7 +123,7 @@ export default function Login(props) {
             />
             <Text fontSize="md" style={styles.textColor} bold>Lưu mật khẩu</Text>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate(SCREEN.FORGOT_PASSWORD)}>
             <Text fontSize="md" style={styles.textColor} bold>Quên mật khẩu?</Text>
           </TouchableOpacity>
         </View>

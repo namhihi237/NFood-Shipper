@@ -12,4 +12,7 @@ export default {
   ORDER_SHIPPING: 'orderShipping',
   REPORT: 'report',
   REVIEW: 'review',
+  FORGOT_PASSWORD: 'forgotPassword',
+  CHECK_CODE: 'checkCode',
+  UPDATE_PASSWORD: 'updatePassword',
 }

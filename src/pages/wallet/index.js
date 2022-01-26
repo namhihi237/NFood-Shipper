@@ -1,21 +1,78 @@
-import { Text, Image, Box, View, Switch } from "native-base";
+import { Text, Image, Box, View, Switch, Button, Modal, FormControl, Input } from "native-base";
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useQuery } from '@apollo/client';
-
+import { WebView } from 'react-native-webview';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { InputField, ButtonCustom, Toast, Loading, Header } from '../../components';
 import { QUERY } from "../../graphql";
 import { moneyUtils, orderUtils } from "../../utils";
 import { SCREEN } from "../../constants"
+import axios from 'axios';
+import { storageUtils } from '../../utils';
+const url = 'https://nfood-api.southeastasia.cloudapp.azure.com/api/v1/payment/deposit';
+
 export default function Wallet(props) {
 
   const navigation = useNavigation();
+  const [showModal, setShowModal] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const [urlPayment, setUrlPayment] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [showModal1, setShowModal1] = React.useState(false);
 
-  const { data } = useQuery(QUERY.GET_REPORT, {
+  const onChangeAmount = (value) => setAmount(value);
+
+  const { data, refetch } = useQuery(QUERY.GET_REPORT, {
+    fetchPolicy: 'network-only',
+    onCompleted: (data) => {
+      console.log(data);
+    }
   });
+
+  const depositMoney = async () => {
+
+    if (amount <= 0 || !amount) {
+      Toast('Vui lòng nhập số tiền cần nạp', 'danger', 'top-right');
+      return;
+    }
+
+    try {
+      const token = await storageUtils.getString('token');
+      const { data } = await axios.post(`${url}`, {
+        amount,
+        type: 'shipper'
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      setUrlPayment(data.url);
+      setShowModal1(true);
+      return
+    } catch (error) {
+      Toast('Có lỗi xảy ra, vui lòng thử lại sau', 'danger', 'top-right');
+    }
+  }
+
+
+  const handleResponse = data => {
+    if (data.title === "success") {
+      setShowModal(false);
+      setShowModal1(false);
+      Toast("Nạp tiền thành công", "success", "top-right");
+      refetch();
+    } else if (data.title === "cancel") {
+      Toast("Nạp tiền thất bại, thử lại", "danger", "top-right");
+      setShowModal1(false);
+      setShowModal(false);
+    } else {
+      return;
+    }
+  };
 
 
   return (
@@ -62,11 +119,47 @@ export default function Wallet(props) {
           <Text ml="4" color="#fff" bold fontSize="md">Rút tiền khỏi ví</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => setShowModal(true)}>
           <FontAwesome5 name="wallet" size={hp("3.2%")} color="#444251" />
           <Text ml="4" color="#fff" bold fontSize="md">Nạp tiền vào ví</Text>
         </TouchableOpacity>
       </View>
+
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} size="lg">
+        <Modal.Content maxWidth="350">
+          <Modal.CloseButton />
+          <Modal.Header>Nạp tiền vào ví</Modal.Header>
+          <Modal.Body>
+            <FormControl>
+              <FormControl.Label>Nhập số tiền cần nạp (VND)</FormControl.Label>
+              <Input onChangeText={onChangeAmount} />
+            </FormControl>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              flex="1"
+              onPress={() => {
+                depositMoney();
+              }}
+            >
+              Continue
+            </Button>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+
+      <Modal isOpen={showModal1} onClose={() => setShowModal1(false)}>
+        <Modal.Content maxWidth="500px">
+          <Modal.CloseButton />
+          <Modal.Body minHeight="600px">
+            <WebView
+              source={{ uri: urlPayment }}
+              style={{ marginTop: 20 }}
+              onNavigationStateChange={(event) => handleResponse(event)}
+            />
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
     </View>
   );
 }
