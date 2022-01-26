@@ -6,11 +6,11 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { useMutation, useSubscription } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 
-import { Text, Button, Center, View, Modal, HStack, VStack } from "native-base";
+import { Text, Button, View, Modal, HStack, VStack } from "native-base";
 import { GPSUtils, moneyUtils } from "../utils";
-import { MUTATION, SUBSCRIPTION } from "../graphql";
+import { MUTATION } from "../graphql";
 import { useRecoilState } from 'recoil';
 import { locationGPS } from "../recoil"
 const TabBar = ({ state, descriptors, navigation }) => {
