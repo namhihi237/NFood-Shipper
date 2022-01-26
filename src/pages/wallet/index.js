@@ -1,14 +1,14 @@
-import { Text, Image, Box, View, Switch, Button, Modal, FormControl, Input } from "native-base";
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, Button, Modal, FormControl, Input } from "native-base";
+import React, { useState } from 'react';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { WebView } from 'react-native-webview';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import { InputField, ButtonCustom, Toast, Loading, Header } from '../../components';
+import { Toast, Header } from '../../components';
 import { QUERY } from "../../graphql";
-import { moneyUtils, orderUtils } from "../../utils";
+import { moneyUtils } from "../../utils";
 import { SCREEN } from "../../constants"
 import axios from 'axios';
 import { storageUtils } from '../../utils';
@@ -125,6 +125,12 @@ export default function Wallet(props) {
         </TouchableOpacity>
       </View>
 
+      <TouchableOpacity style={styles.historyContainer} onPress={() => navigation.navigate(SCREEN.TRANSACTION_HISTORY)}>
+        <FontAwesome5 name="history" size={hp("3.2%")} color="#F24F04" />
+        <Text fontSize="md">Lịch sử giao dịch</Text>
+        <FontAwesome5 name="angle-right" size={hp("3.2%")} color="#444251" />
+      </TouchableOpacity>
+
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} size="lg">
         <Modal.Content maxWidth="350">
           <Modal.CloseButton />
@@ -209,6 +215,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: hp("1%"),
     marginTop: hp('3%'),
+  },
+  historyContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    marginHorizontal: wp('4%'),
+    borderRadius: 10,
+    paddingHorizontal: wp("3%"),
+    paddingVertical: hp("2%"),
+    marginTop: hp('3.5%'),
   }
 
 });

@@ -15,4 +15,5 @@ export default {
   FORGOT_PASSWORD: 'forgotPassword',
   CHECK_CODE: 'checkCode',
   UPDATE_PASSWORD: 'updatePassword',
+  TRANSACTION_HISTORY: 'transactionHistory',
 }

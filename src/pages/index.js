@@ -11,6 +11,7 @@ import OrderShipping from "./order-shipping";
 import Report from "./reports";
 import Review from "./reviews";
 import { CheckCode, Forgot, UpdatePassword } from "./forgot-password";
+import TransactionHistory from "./transaction-history";
 
 export {
   Register,
@@ -27,5 +28,6 @@ export {
   Review,
   CheckCode,
   Forgot,
-  UpdatePassword
+  UpdatePassword,
+  TransactionHistory,
 };

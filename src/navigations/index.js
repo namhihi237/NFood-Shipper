@@ -13,7 +13,8 @@ import {
   Review,
   Forgot,
   CheckCode,
-  UpdatePassword
+  UpdatePassword,
+  TransactionHistory,
 } from '../pages';
 
 import Tab from './tab';
@@ -53,6 +54,7 @@ const Navigation = () => {
         <Stack.Screen name={SCREEN.FORGOT_PASSWORD} component={Forgot} />
         <Stack.Screen name={SCREEN.CHECK_CODE} component={CheckCode} />
         <Stack.Screen name={SCREEN.UPDATE_PASSWORD} component={UpdatePassword} />
+        <Stack.Screen name={SCREEN.TRANSACTION_HISTORY} component={TransactionHistory} />
       </Stack.Navigator>
     </NavigationContainer>
   );

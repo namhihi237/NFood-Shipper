@@ -185,5 +185,17 @@ export default {
       goodReviews
       normalReviews
     }
+  }`,
+
+  GET_TRANSACTIONS: gql`query GetTransactions($type: String!) {
+    getTransactions(type: $type) {
+      _id
+      userId
+      amount
+      type
+      status
+      currency
+      createdAt
+    }
   }`
 };
