@@ -1,5 +1,5 @@
 import { Text, View, Button, Modal, FormControl, Input } from "native-base";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
@@ -20,7 +20,6 @@ export default function Wallet(props) {
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState(0);
   const [urlPayment, setUrlPayment] = React.useState('');
-  const [isLoading, setIsLoading] = React.useState(false);
   const [showModal1, setShowModal1] = React.useState(false);
 
   const onChangeAmount = (value) => setAmount(value);
@@ -31,6 +30,12 @@ export default function Wallet(props) {
       console.log(data);
     }
   });
+
+  useEffect(() => {
+    navigation.addListener('focus', () => {
+      refetch();
+    });
+  }, []);
 
   const depositMoney = async () => {
 

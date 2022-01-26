@@ -193,7 +193,6 @@ export default {
       userId
       amount
       type
-      status
       currency
       createdAt
     }
