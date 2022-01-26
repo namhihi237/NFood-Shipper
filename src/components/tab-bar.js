@@ -95,23 +95,23 @@ const TabBar = ({ state, descriptors, navigation }) => {
       const location = await GPSUtils.getCurrentPosition();
       if (location) {
         // check has changed location
-        if (previousLocation && (previousLocation?.latitude !== location.coords.latitude || previousLocation?.longitude !== location.coords.longitude)) {
-          updateLocationShipper({
-            variables: {
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude
-            }
-          });
-          setPreviousLocation({
+        // if (previousLocation && (previousLocation?.latitude !== location.coords.latitude || previousLocation?.longitude !== location.coords.longitude)) {
+        updateLocationShipper({
+          variables: {
             latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          });
+            longitude: location.coords.longitude
+          }
+        });
+        setPreviousLocation({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
 
-          setLocationG({
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          });
-        }
+        setLocationG({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+        // }
       } else {
         setModalVisible(true);
         setIsGPS(false);
