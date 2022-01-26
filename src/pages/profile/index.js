@@ -1,19 +1,25 @@
-import { Text, Box, View, Switch } from "native-base";
+import { Text, FormControl, View, Modal, Button, Input } from "native-base";
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, ScrollView, Image, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation, useQuery } from '@apollo/client';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { InputField, ButtonCustom, Toast, Loading, Header } from '../../components';
+import { Header, Toast } from '../../components';
 import { SCREEN } from "../../constants";
-import { QUERY, client } from '../../graphql';
+import { QUERY, MUTATION } from '../../graphql';
 import { moneyUtils, storageUtils } from '../../utils';
 
 const noImage = "https://res.cloudinary.com/do-an-cnpm/image/upload/v1637807216/user_ilxv1x.png";
 const noUpdate = 'Chưa cập nhật';
 
 export default function Store(props) {
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [password, setPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+
+  const onChangePassword = (text) => setPassword(text);
+  const onChangeNewPassword = (text) => setNewPassword(text);
 
   const { data } = useQuery(QUERY.GET_USER_INFO, {
     variables: {
@@ -21,6 +27,42 @@ export default function Store(props) {
     },
     fetchPolicy: 'cache-and-network',
   });
+
+  const [changePassword] = useMutation(MUTATION.CHANGE_PASSWORD, {
+    variables: {
+      oldPassword: password,
+      newPassword: newPassword
+    },
+    onCompleted: (data) => {
+      setModalVisible(false);
+      Toast('Đổi mật khẩu thành công', 'success', 'top-right');
+    },
+    onError: (error) => {
+      Toast(error.message, 'danger', 'top-right');
+    }
+  })
+
+  const changePasswordHandler = async () => {
+    // validate password
+    if (password === '' || newPassword === '') {
+      Toast('Vui lòng nhập đầy đủ thông tin', 'danger', 'top-right');
+      return;
+    }
+
+    // new password > 6 characters
+    if (newPassword.length < 6) {
+      Toast('Mật khẩu mới phải có ít nhất 6 ký tự', 'danger', 'top-right');
+      return;
+    }
+
+    // check 2 password dont  same password
+    if (password === newPassword) {
+      Toast('Mật khẩu mới không được trùng với mật khẩu cũ', 'danger', 'top-right');
+      return;
+    }
+
+    await changePassword();
+  }
 
 
   const logOut = async () => {
@@ -41,7 +83,7 @@ export default function Store(props) {
             <Text fontSize="xl">{data?.getUser?.name}</Text>
             <View style={styles.phoneContainer}>
               <Text fontSize="md">{data?.getUser?.phoneNumber}</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <Text color="#0369a1">Đổi mật khẩu</Text>
               </TouchableOpacity>
             </View>
@@ -55,7 +97,7 @@ export default function Store(props) {
 
         <View style={styles.shipping}>
           <Text fontSize="md" mr="4">Giá ship hiện tại:</Text>
-          <Text fontSize="md" color="#be123c" bold>{moneyUtils.convertVNDToString(4000)} đ/km</Text>
+          <Text fontSize="md" color="#be123c" bold>{moneyUtils.convertVNDToString(5000)} đ/km</Text>
         </View>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate(SCREEN.REVIEW)}>
@@ -101,6 +143,47 @@ export default function Store(props) {
             }
           </View>
         </View>
+
+        <Modal
+          isOpen={modalVisible}
+          onClose={() => setModalVisible(false)}
+          closeOnOverlayClick={false}
+        >
+          <Modal.Content>
+            <Modal.CloseButton />
+            <Modal.Header>Đổi mật khẩu mới</Modal.Header>
+            <Modal.Body>
+              <FormControl>
+                <FormControl.Label>Mật khẩu hiện tại</FormControl.Label>
+                <Input onChangeText={onChangePassword} type='password' />
+              </FormControl>
+              <FormControl mt="3">
+                <FormControl.Label>Mật khẩu mới</FormControl.Label>
+                <Input onChangeText={onChangeNewPassword} type='password' />
+              </FormControl>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button.Group space={2}>
+                <Button
+                  variant="ghost"
+                  colorScheme="blueGray"
+                  onPress={() => {
+                    setModalVisible(false)
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onPress={() => {
+                    changePasswordHandler();
+                  }}
+                >
+                  Save
+                </Button>
+              </Button.Group>
+            </Modal.Footer>
+          </Modal.Content>
+        </Modal>
       </ScrollView>
     </View >
   );

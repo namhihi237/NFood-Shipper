@@ -105,5 +105,9 @@ export default {
 
   UPDATE_PASSWORD: gql`mutation UpdatePassword($password: String!, $code: String!) {
     updatePassword(password: $password, code: $code)
+  }`,
+
+  CHANGE_PASSWORD: gql`mutation ChangePassword($oldPassword: String!, $newPassword: String!) {
+    changePassword(oldPassword: $oldPassword, newPassword: $newPassword)
   }`
 }
