@@ -17,4 +17,5 @@ export default {
   UPDATE_PASSWORD: 'updatePassword',
   TRANSACTION_HISTORY: 'transactionHistory',
   ADD_BANK: 'addBank',
+  WITHDRAW: 'withdraw',
 }

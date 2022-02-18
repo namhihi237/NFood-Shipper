@@ -95,13 +95,13 @@ export default function Home(props) {
   }
   const reduceMaxDistance = () => {
     if (tempMaxDistance > 0.1) {
-      setTempMaxDistance((tempMaxDistance - 0.1).toFixed(1));
+      setTempMaxDistance((tempMaxDistance - 0.1)?.toFixed(1));
     }
   }
 
   const increaseMaxDistance = () => {
     if (tempMaxDistance < 10) {
-      setTempMaxDistance((tempMaxDistance + 0.1).toFixed(1));
+      setTempMaxDistance((tempMaxDistance + 0.1)?.toFixed(1));
     }
   }
 

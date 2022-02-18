@@ -15,7 +15,8 @@ import {
   CheckCode,
   UpdatePassword,
   TransactionHistory,
-  AddBank
+  AddBank,
+  WithDraw
 } from '../pages';
 
 import Tab from './tab';
@@ -57,6 +58,7 @@ const Navigation = () => {
         <Stack.Screen name={SCREEN.UPDATE_PASSWORD} component={UpdatePassword} />
         <Stack.Screen name={SCREEN.TRANSACTION_HISTORY} component={TransactionHistory} />
         <Stack.Screen name={SCREEN.ADD_BANK} component={AddBank} />
+        <Stack.Screen name={SCREEN.WITHDRAW} component={WithDraw} />
         
       </Stack.Navigator>
     </NavigationContainer>

@@ -203,4 +203,18 @@ export default {
     }
   }`,
 
+  GET_WITHDRAW: gql`query GetWithdrawal($type: roleEnum!) {
+    getWithdrawal(type: $type) {
+      money
+      maxWithdrawal
+      minWithdrawal
+      fee
+      bank {
+        accountNumber
+        accountName
+        bankName
+      }
+    }
+  }`,
+
 };

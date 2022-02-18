@@ -141,12 +141,12 @@ export default function Store(props) {
         <View style={styles.creditCard}>
           <Text fontSize="md" mr="4" bold>Thẻ tín dụng:</Text>
           <View style={styles.card}>
-            <Text fontSize="md" color="#a8a29e" mb="2">{data?.getUser?.creditCard?.number || noUpdate}</Text>
+            <Text fontSize="md" color="#a8a29e" mb="2">{data?.getUser?.bank?.accountNumber || noUpdate}</Text>
             {
               !data?.getUser?.creditCard?.number ? (<TouchableOpacity onPress={() => navigation.navigate(SCREEN.ADD_BANK, {
                 bank: data?.getUser?.bank,
               })}>
-                <Text color="#0369a1" fontSize="md">Thêm thẻ tín dụng</Text>
+                <Text color="#0369a1" fontSize="md">{ data?.getUser?.bank ? 'Cập nhật ngân hàng'  : 'Thêm thẻ ngân hầng'}</Text>
               </TouchableOpacity>) : null
             }
           </View>
