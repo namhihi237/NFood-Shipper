@@ -17,8 +17,7 @@ export default function AddBank(props) {
   const [accountName, setAccountName] = React.useState(route.params?.bank?.accountName || '');
 
   const onChangeAccountName = (value) => {
-    const valueUpper = value.toUpperCase();
-    setAccountName(valueUpper);
+    setAccountName(value);
   }
   const onChangeAccountNumber = (value) => setAccountNumber(value);
 
@@ -26,7 +25,7 @@ export default function AddBank(props) {
     variables: {
       bankName,
       accountNumber,
-      accountName,
+      accountName: accountName.toUpperCase(),
       type: 'shipper'
     },
     onCompleted: () => {
