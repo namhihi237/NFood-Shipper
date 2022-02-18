@@ -1,8 +1,8 @@
 import { Text, FormControl, View, Modal, Button, Input } from "native-base";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useMutation, useQuery } from '@apollo/client';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Header, Toast } from '../../components';
@@ -10,7 +10,6 @@ import { SCREEN } from "../../constants";
 import { QUERY, MUTATION } from '../../graphql';
 import { moneyUtils, storageUtils } from '../../utils';
 
-const noImage = "https://res.cloudinary.com/do-an-cnpm/image/upload/v1637807216/user_ilxv1x.png";
 const noUpdate = 'Chưa cập nhật';
 
 export default function Store(props) {
@@ -21,11 +20,11 @@ export default function Store(props) {
   const onChangePassword = (text) => setPassword(text);
   const onChangeNewPassword = (text) => setNewPassword(text);
 
-  const { data } = useQuery(QUERY.GET_USER_INFO, {
+  const { data, refetch } = useQuery(QUERY.GET_USER_INFO, {
     variables: {
       role: "shipper"
     },
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'only-network',
   });
 
   const [changePassword] = useMutation(MUTATION.CHANGE_PASSWORD, {
@@ -41,6 +40,13 @@ export default function Store(props) {
       Toast(error.message, 'danger', 'top-right');
     }
   })
+
+  React.useEffect(() => {
+    navigation.addListener('focus', () => {
+      refetch();
+    });
+  }, []);
+    
 
   const changePasswordHandler = async () => {
     // validate password
@@ -137,7 +143,9 @@ export default function Store(props) {
           <View style={styles.card}>
             <Text fontSize="md" color="#a8a29e" mb="2">{data?.getUser?.creditCard?.number || noUpdate}</Text>
             {
-              !data?.getUser?.creditCard?.number ? (<TouchableOpacity>
+              !data?.getUser?.creditCard?.number ? (<TouchableOpacity onPress={() => navigation.navigate(SCREEN.ADD_BANK, {
+                bank: data?.getUser?.bank,
+              })}>
                 <Text color="#0369a1" fontSize="md">Thêm thẻ tín dụng</Text>
               </TouchableOpacity>) : null
             }

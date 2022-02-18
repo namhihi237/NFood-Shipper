@@ -16,4 +16,5 @@ export default {
   CHECK_CODE: 'checkCode',
   UPDATE_PASSWORD: 'updatePassword',
   TRANSACTION_HISTORY: 'transactionHistory',
+  ADD_BANK: 'addBank',
 }

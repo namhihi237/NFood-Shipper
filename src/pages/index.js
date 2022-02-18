@@ -12,6 +12,7 @@ import Report from "./reports";
 import Review from "./reviews";
 import { CheckCode, Forgot, UpdatePassword } from "./forgot-password";
 import TransactionHistory from "./transaction-history";
+import { AddBank } from './bank';
 
 export {
   Register,
@@ -30,4 +31,5 @@ export {
   Forgot,
   UpdatePassword,
   TransactionHistory,
+  AddBank,
 };

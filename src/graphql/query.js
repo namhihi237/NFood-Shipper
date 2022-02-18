@@ -14,6 +14,11 @@ export default {
       coordinates
       name
       isShippingOrder
+      bank {
+        accountNumber
+        accountName
+        bankName
+      }
       identityCard {
         beforeImage
         afterImage
@@ -196,5 +201,6 @@ export default {
       currency
       createdAt
     }
-  }`
+  }`,
+
 };
