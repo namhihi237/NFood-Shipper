@@ -14,6 +14,7 @@ import { CheckCode, Forgot, UpdatePassword } from "./forgot-password";
 import TransactionHistory from "./transaction-history";
 import { AddBank } from './bank';
 import WithDraw from "./withdraw";
+import UpdateProfile from "./profile/update";
 
 export {
   Register,
@@ -33,5 +34,6 @@ export {
   UpdatePassword,
   TransactionHistory,
   AddBank,
-  WithDraw
+  WithDraw,
+  UpdateProfile
 };

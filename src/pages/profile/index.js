@@ -132,7 +132,9 @@ export default function Store(props) {
           <Text bold fontSize="md">Ảnh chụp CMND/CCCD:</Text>
           <Text fontSize="md" color="#a8a29e" mb="2">{noUpdate}</Text>
 
-          <TouchableOpacity style={styles.updateButton}>
+          <TouchableOpacity style={styles.updateButton} onPress={() => navigation.navigate(SCREEN.UPDATE_PROFILE, {
+            user: data?.getUser
+          })}>
             <Text color="#0369a1" fontSize="xl" mr="4">Chỉnh sửa thông tin</Text>
             <FontAwesome5 name="angle-right" size={20} color="#0369a1" />
           </TouchableOpacity>
