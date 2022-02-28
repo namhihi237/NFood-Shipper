@@ -13,9 +13,11 @@ import { PROVINCE } from '../../constants';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const GENDERS = [{
-  label: 'Male'
+  label: 'Nam',
+  value: 'Male'
 }, {
-  label: 'Female'
+  label: 'Nữ',
+  value: 'Female'
 }]
 
 export default function Store(props) {
@@ -82,7 +84,7 @@ export default function Store(props) {
           {
             GENDERS.map((item, index) => {
               return (<Select.Item key={index} label={`${item.label}`}
-                value={`${item.label}`} />)
+                value={`${item.value}`} />)
             })
           }
         </Select>
