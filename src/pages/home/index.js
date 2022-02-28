@@ -155,13 +155,12 @@ export default function Home(props) {
       <Modal isOpen={showOrderModal} onClose={() => setShowOrderModal(false)} closeOnOverlayClick={false}>
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
-          <Modal.Header>Đơn hàng cần giao</Modal.Header>
+          <Modal.Header>Đơn hàng cần  </Modal.Header>
           <Modal.Body>
-            <Center>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: wp('25%') }}>
-
-              </View>
-            </Center>
+            <View style={{ justifyContent: 'space-between', }}>
+              <Text bold>{order?.name}</Text>
+              <Text>{order?.address}</Text>
+            </View>
           </Modal.Body>
           <Modal.Footer>
             <Button.Group space={2}>
