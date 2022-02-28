@@ -5,7 +5,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BANKS } from "../../constants";
 import { Header, ButtonCustom, Toast } from '../../components';
-import {  MUTATION } from '../../graphql';
+import { MUTATION } from '../../graphql';
 import { useMutation } from '@apollo/client';
 
 export default function AddBank(props) {
@@ -56,6 +56,7 @@ export default function AddBank(props) {
             <Select selectedValue={bankName}
               borderColor="#B2B6BB"
               height="50"
+              fontSize="sm"
               minWidth="200"
               accessibilityLabel="Choose Service"
               placeholder="Chọn ngân hàng" _selectedItem={{

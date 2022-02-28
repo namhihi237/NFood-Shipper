@@ -1,6 +1,5 @@
 import React from 'react';
-import { Text } from 'native-base';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -11,7 +10,7 @@ const ButtonCustom = (props) => {
   const height = props.height ? hp(props.height) : hp('8%');
   return (
     <TouchableOpacity style={{ ...styles.btn, ...props.style, width, height }} onPress={props.onPress} >
-      <Text fontSize="xl" bold style={styles.text}>{props.title}</Text>
+      <Text style={styles.text}>{props.title}</Text>
     </TouchableOpacity>
   );
 };
@@ -31,5 +30,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
+    fontFamily: "Dongle-Bold",
+    fontSize: 30,
   },
 });

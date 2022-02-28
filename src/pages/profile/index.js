@@ -46,7 +46,7 @@ export default function Store(props) {
       refetch();
     });
   }, []);
-    
+
 
   const changePasswordHandler = async () => {
     // validate password
@@ -81,7 +81,7 @@ export default function Store(props) {
   const navigation = useNavigation();
   return (
     <View style={styles.mainContainer}>
-      <Header title={"NFood Shipper"} />
+      <Header title={"Thồng tin cá nhân"} />
       <ScrollView style={{ marginBottom: hp('6%') }}>
         <View style={styles.infoContainer}>
           {data ? (<Image source={{ uri: data?.getUser?.image }} style={styles.image} />) : null}
@@ -148,7 +148,7 @@ export default function Store(props) {
               !data?.getUser?.creditCard?.number ? (<TouchableOpacity onPress={() => navigation.navigate(SCREEN.ADD_BANK, {
                 bank: data?.getUser?.bank,
               })}>
-                <Text color="#0369a1" fontSize="md">{ data?.getUser?.bank ? 'Cập nhật ngân hàng'  : 'Thêm thẻ ngân hầng'}</Text>
+                <Text color="#0369a1" fontSize="md">{data?.getUser?.bank ? 'Cập nhật ngân hàng' : 'Thêm thẻ ngân hầng'}</Text>
               </TouchableOpacity>) : null
             }
           </View>

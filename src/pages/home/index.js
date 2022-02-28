@@ -192,7 +192,7 @@ export default function Home(props) {
   const navigation = useNavigation();
   return (
     <View style={styles.mainContainer}>
-      <Header title={"NFood Shipper"} />
+      <Header title={"Nhận đơn giao hàng"} />
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: hp("20%") }}>
         <View style={{ backgroundColor: '#fff', padding: 10, alignItems: 'center', flex: 1, paddingTop: 30 }}  >
           <Text bold fontSize="lg">Tổng điểm thưởng</Text>

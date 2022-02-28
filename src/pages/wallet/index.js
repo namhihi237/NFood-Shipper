@@ -82,7 +82,7 @@ export default function Wallet(props) {
 
   return (
     <View style={styles.mainContainer}>
-      <Header title={"NFood Shipper"} />
+      <Header title={"Thống kê"} />
       <View >
         <TouchableOpacity style={styles.incomeContainer} onPress={() => navigation.navigate(SCREEN.REPORT)}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -119,7 +119,7 @@ export default function Wallet(props) {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={() =>  navigation.navigate(SCREEN.WITHDRAW)}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(SCREEN.WITHDRAW)}>
           <FontAwesome5 name="wallet" size={hp("3.2%")} color="#444251" />
           <Text ml="4" color="#fff" bold fontSize="md">Rút tiền khỏi ví</Text>
         </TouchableOpacity>
@@ -153,7 +153,7 @@ export default function Wallet(props) {
                 depositMoney();
               }}
             >
-              Continue
+              Tiếp tục
             </Button>
           </Modal.Footer>
         </Modal.Content>

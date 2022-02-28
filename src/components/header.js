@@ -94,9 +94,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontFamily: 'SF-UI-Text-Semibold',
-    fontWeight: "bold",
-    fontSize: hp('2%'),
+    fontFamily: 'Dongle-Bold',
+    fontSize: hp('3.5%'),
   },
 
   right: {

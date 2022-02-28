@@ -170,7 +170,7 @@ export default function Order(props) {
 
   return (
     <View style={styles.mainContainer}>
-      <Header title={"NFood Shipper"} />
+      <Header title={"Quản lý đơn hàng"} />
       <TabView
         navigationState={{ index, routes }}
         renderScene={data ? renderScene : renderSceneNo}

@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Image, ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useMutation, useLazyQuery, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { MUTATION, QUERY } from '../../graphql';
 import { SCREEN } from "../../constants";
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { timeUtils, GPSUtils, moneyUtils } from "../../utils";
-import { InputField, ButtonCustom, Toast, Loading, Header } from '../../components';
+import { moneyUtils } from "../../utils";
+import { Toast, Header } from '../../components';
 
 
-import { Text, Button, Switch, View, Modal, HStack, Spinner, Center, AlertDialog } from "native-base";
+import { Text, Button, View, HStack, Spinner, Center, AlertDialog } from "native-base";
 const buttonTitle = {
   RECEIVED_ORDER: {
     title: 'Đã lấy hàng',
@@ -109,14 +108,14 @@ export default function OrderShipping(props) {
     <View style={styles.mainContainer}>
       <Header title={"Chi tiết đơn giao"} onPress={() => navigation.goBack()} icon={"arrow-left"} />
       {data ? (<ScrollView style={styles.content}>
-        <View style={{ minHeight: hp('80%') }}>
+        <View style={{ minHeight: hp('80%'), backgroundColor: '#fff', }}>
           <Center><Text bold fontSize="lg" mt="2">#{data.getOrderById.invoiceNumber}</Text></Center>
-          <View style={{ marginHorizontal: wp('4%') }}>
+          <View style={{ marginHorizontal: wp('4%'), }}>
             <Text fontSize="md">Quán: {data.getOrderById?.vendor?.name}</Text>
             <Text fontSize="md">Địa chỉ: {data.getOrderById?.vendor?.address}</Text>
           </View>
 
-          <View mt="2" style={{ marginHorizontal: wp('4%') }}>
+          <View mt="2" mb="2" style={{ marginHorizontal: wp('4%') }}>
             <Text fontSize="md">Người nhận: {data.getOrderById.name}</Text>
             <Text fontSize="md">Địa chỉ: {data.getOrderById.address}</Text>
             <Text fontSize="md">SĐT: {data.getOrderById.phoneNumber}</Text>

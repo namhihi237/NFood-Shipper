@@ -23,7 +23,9 @@ export default function TransactionHistory(props) {
     if (item.type === 'deposit') {
       return '+' + moneyUtils.convertVNDToString(item.amount) + ' đ';
     } else if (item.type === 'payment') {
-      return '-' + moneyUtils.convertVNDToString(item.amount);
+      return '-' + moneyUtils.convertVNDToString(item.amount) + ' đ';
+    } else if (item.type === 'withdraw') {
+      return '-' + moneyUtils.convertVNDToString(item.amount) + ' đ';
     }
   }
 
@@ -50,7 +52,7 @@ export default function TransactionHistory(props) {
         </View>
         <View style={styles.line}></View>
       </View >
-    )
+    );
   }
 
   return (
