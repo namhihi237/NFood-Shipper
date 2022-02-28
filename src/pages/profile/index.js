@@ -181,14 +181,14 @@ export default function Store(props) {
                     setModalVisible(false)
                   }}
                 >
-                  Cancel
+                  Hủy
                 </Button>
                 <Button
                   onPress={() => {
                     changePasswordHandler();
                   }}
                 >
-                  Save
+                  Cập nhật
                 </Button>
               </Button.Group>
             </Modal.Footer>

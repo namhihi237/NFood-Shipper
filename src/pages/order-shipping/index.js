@@ -7,8 +7,8 @@ import { MUTATION, QUERY } from '../../graphql';
 import { SCREEN } from "../../constants";
 import { moneyUtils } from "../../utils";
 import { Toast, Header } from '../../components';
-
-
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { Linking } from 'react-native'
 import { Text, Button, View, HStack, Spinner, Center, AlertDialog } from "native-base";
 const buttonTitle = {
   RECEIVED_ORDER: {
@@ -118,7 +118,14 @@ export default function OrderShipping(props) {
           <View mt="2" mb="2" style={{ marginHorizontal: wp('4%') }}>
             <Text fontSize="md">Người nhận: {data.getOrderById.name}</Text>
             <Text fontSize="md">Địa chỉ: {data.getOrderById.address}</Text>
-            <Text fontSize="md">SĐT: {data.getOrderById.phoneNumber}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Text fontSize="md">SĐT: {data.getOrderById.phoneNumber}</Text>
+              <TouchableOpacity style={{ flexDirection: 'row', backgroundColor: '#B2B6BB', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 6 }}
+                onPress={() => Linking.openURL(`tel:${data.getOrderById.phoneNumber}`)}>
+                <Text mr="4" >Gọi cho người mua</Text>
+                <FontAwesome5 name="phone-alt" size={20} color="#059669" />
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View bg="#fff" style={{ paddingHorizontal: wp('4%') }}>

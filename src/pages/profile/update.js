@@ -26,7 +26,7 @@ export default function Store(props) {
 
   const [gender, setGender] = React.useState(route.params?.user?.gender || '');
   const [address, setAddress] = React.useState(route.params?.user?.address);
-  const [birthday, setBirthday] = React.useState(route.params?.user?.birthday || '');
+  const [birthday, setBirthday] = React.useState(route.params?.user?.birthday);
   const [identityNumber, setIdentityNumber] = React.useState(route.params?.user?.identityCard?.number || '');
   const [identityDate, setIdentityDate] = React.useState(route.params?.user?.identityCard?.date || '');
   const [identityPlace, setIdentityPlace] = React.useState(route.params?.user?.identityCard?.place || '');
@@ -48,7 +48,7 @@ export default function Store(props) {
   const navigation = useNavigation();
   return (
     <View style={styles.mainContainer}>
-      <Header title={"Cập nhật thông tin"} />
+      <Header title={"Cập nhật thông tin"} icon={"arrow-left"} onPress={() => navigation.goBack()} />
       <ScrollView style={styles.scrollContainer}>
         <Text bold fontSize="md" >Thông tin chung</Text>
 
