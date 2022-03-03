@@ -1,6 +1,6 @@
-import { Text, Image, Box, View, Switch } from "native-base";
+import { Text, Box, View, Switch } from "native-base";
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
@@ -96,6 +96,7 @@ export default function Login(props) {
     >
       <Loading status={loading} message={'Đăng nhập'} />
       <View style={styles.mainContainer}>
+        <Image source={require('../../../assets/images/logo.png')} style={styles.logo} />
         <Text fontSize="3xl" bold style={styles.title}>Đăng nhập</Text>
         <InputField
           iconName={"mobile-alt"}
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: hp('95%'),
     alignItems: 'center',
-    paddingTop: hp('15%'),
+    paddingTop: hp('10%'),
   },
   title: {
     marginBottom: hp('5%'),
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: hp('25%'),
+    marginTop: hp('10%'),
 
   },
   textLink: {
