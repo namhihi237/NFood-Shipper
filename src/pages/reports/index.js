@@ -1,15 +1,13 @@
-import { Text, HStack, Box, View, Pressable, Center } from "native-base";
+import { Text, Box, View, Pressable } from "native-base";
 import React, { useEffect, useState, useCallback } from 'react';
-import { StyleSheet, TouchableOpacity, Dimensions, StatusBar, Image, FlatList } from 'react-native';
+import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { TabView, SceneMap } from 'react-native-tab-view';
-import { Header, HeaderBack } from '../../components';
-import { SCREEN } from "../../constants";
+import { Header } from '../../components';
 import { QUERY } from "../../graphql";
-import { moneyUtils, orderUtils, timeUtils } from "../../utils";
-import * as ImagePicker from 'react-native-image-picker';
+import { moneyUtils, timeUtils } from "../../utils";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MonthPicker from 'react-native-month-year-picker';
@@ -84,8 +82,8 @@ export default function Report(props) {
         </View>
         <View style={styles.line}></View>
         <View style={styles.reportLine}>
-          <Text fontSize="md">Tông điểm</Text>
-          <Text bold fontSize="md">{data?.getIncomesByShipper?.rewardPoint}</Text>
+          <Text fontSize="md">Tông đơn đã giao</Text>
+          <Text bold fontSize="md">{data?.getIncomesByShipper?.totalOrder}</Text>
         </View>
         <View style={styles.line}></View>
       </View >
