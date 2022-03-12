@@ -74,15 +74,15 @@ export default function Home(props) {
       return orders.getOrderByDistances.map((order, index) => {
         // convert location coords to object
         const location = {
-          latitude: order.vendor.location.coordinates[1],
-          longitude: order.vendor.location.coordinates[0]
+          latitude: order?.location?.coordinates[1],
+          longitude: order?.location?.coordinates[0]
         }
         return (<Marker
           key={index}
           centerOffset={{ x: 25, y: 25 }}
           anchor={{ x: 0.5, y: 0.5 }}
           coordinate={location}
-          title={order.vendor.name}
+          title={order.name}
           onPress={() => {
             setOrder(order);
             setShowOrderModal(true);

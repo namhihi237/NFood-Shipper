@@ -63,6 +63,9 @@ export default {
       estimatedDeliveryTime
       vendorId
       createdAt
+      location {
+        coordinates
+      }
     }
   }`,
 
