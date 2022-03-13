@@ -51,7 +51,7 @@ export default function Order(props) {
       }}>
         <View>
           <View style={{ paddingHorizontal: wp('5%'), backgroundColor: '#fff', paddingVertical: 10 }} flexDirection='row'>
-            <Image source={require('../../../assets/images/no-order.png')} style={{ width: wp('23%'), height: wp('23%') }} />
+            <Image source={{ uri: order.orderItems[0].image }} style={{ width: wp('23%'), height: wp('23%') }} />
             <View ml='2'>
               <Text mt='2' bold fontSize='md'>#{order.invoiceNumber}</Text>
               <View mt='1' style={{ flexDirection: 'row', justifyContent: 'space-between', width: wp('63%') }} >
