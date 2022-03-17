@@ -60,13 +60,12 @@ export default function Wallet(props) {
     }
   }
 
-
   const handleResponse = data => {
     if (data.title === "success") {
       setShowModal(false);
       setShowModal1(false);
-      Toast("Nạp tiền thành công", "success", "top-right");
       refetch();
+      Toast("Nạp tiền thành công", "success", "top-right");
     } else if (data.title === "cancel") {
       Toast("Nạp tiền thất bại, thử lại", "danger", "top-right");
       setShowModal1(false);

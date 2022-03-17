@@ -6,7 +6,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { MUTATION, QUERY } from '../../graphql';
 import { SCREEN } from "../../constants";
 import { moneyUtils } from "../../utils";
-import { Toast, Header } from '../../components';
+import { Toast, Header, Loading } from '../../components';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Linking } from 'react-native'
 import { Text, Button, View, HStack, Spinner, Center, AlertDialog } from "native-base";
@@ -48,7 +48,7 @@ export default function OrderShipping(props) {
     });
   }
 
-  const { data } = useQuery(QUERY.GET_ORDER_BY_ID, {
+  const { data, loading } = useQuery(QUERY.GET_ORDER_BY_ID, {
     variables: {
       id: route.params.orderId
     },
@@ -62,8 +62,9 @@ export default function OrderShipping(props) {
     },
   })
 
-  const [pickUpOrder, { loading }] = useMutation(MUTATION.PICK_UP_SHIPPER_ORDER, {
+  const [pickUpOrder, { loading: loading1 }] = useMutation(MUTATION.PICK_UP_SHIPPER_ORDER, {
     onCompleted: (data) => {
+      Toast('Đã cập nhật trạng thái đơn hàng thành công', 'success', 'top-right');
       setTitleButton(buttonTitle.DELIVERED_ORDER);
     },
     onError: (error) => {
@@ -75,6 +76,7 @@ export default function OrderShipping(props) {
   const [completeShippingOrder] = useMutation(MUTATION.COMPLETE_SHIPPER_ORDER, {
     onCompleted: (data) => {
       navigation.navigate(SCREEN.TAB);
+      Toast('Xác nhận giao hàng thành công', 'success', 'top-right');
     },
     onError: (error) => {
       Toast(error.message, 'danger', 'top-right');
@@ -106,6 +108,7 @@ export default function OrderShipping(props) {
 
   return (
     <View style={styles.mainContainer}>
+      {loading ? <Loading /> : null}
       <Header title={"Chi tiết đơn giao"} onPress={() => navigation.goBack()} icon={"arrow-left"} />
       {data ? (<ScrollView style={styles.content}>
         <View style={{ minHeight: hp('80%'), backgroundColor: '#fff', }}>
@@ -167,7 +170,7 @@ export default function OrderShipping(props) {
       <View style={{ backgroundColor: '#fff', paddingTop: 10 }}>
         <TouchableWithoutFeedback onPress={() => setIsOpen(true)}>
           <View style={styles.button}>
-            {loading ? <Spinner size="sm" /> : null}
+            {loading1 ? <Spinner size="sm" /> : null}
             <Text style={styles.titleButton}>{titleButton.title}</Text>
           </View>
         </TouchableWithoutFeedback>
