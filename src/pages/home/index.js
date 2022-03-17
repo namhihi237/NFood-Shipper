@@ -51,6 +51,7 @@ export default function Home(props) {
     onCompleted: (data) => {
       setShowModal(false);
       setMaxDistance(tempMaxDistance);
+      Toast('Cập nhật thành công', 'success', 'top-right');
     },
     onError: (error) => {
       Toast(error.message, 'danger', 'top-right');
@@ -101,7 +102,7 @@ export default function Home(props) {
 
   const increaseMaxDistance = () => {
     if (tempMaxDistance < 10) {
-      setTempMaxDistance((tempMaxDistance + 0.1)?.toFixed(1));
+      setTempMaxDistance((parseFloat(tempMaxDistance) + 0.1)?.toFixed(1));
     }
   }
 
@@ -109,16 +110,15 @@ export default function Home(props) {
     return (
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} closeOnOverlayClick={false}>
         <Modal.Content maxWidth="400px">
-          <Modal.CloseButton />
           <Modal.Header>Khoảng cách tối đa nhận đơn</Modal.Header>
           <Modal.Body>
             <Center>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: wp('25%') }}>
-                <TouchableOpacity onPress={reduceMaxDistance} style={{ borderWidth: 1, justifyContent: 'center', alignItems: 'center', display: 'flex', width: 27, borderColor: '#F24F04' }}>
+                <TouchableOpacity onPress={reduceMaxDistance} style={{ borderWidth: 1, justifyContent: 'center', alignItems: 'center', display: 'flex', width: 27, borderColor: '#F24F04', borderRadius: 8 }}>
                   <Text bold fontSize="xl">-</Text>
                 </TouchableOpacity>
                 <Text bold fontSize="xl">{tempMaxDistance}</Text>
-                <TouchableOpacity onPress={increaseMaxDistance} style={{ borderWidth: 1, justifyContent: 'center', alignItems: 'center', display: 'flex', width: 27, borderColor: '#F24F04' }}>
+                <TouchableOpacity onPress={increaseMaxDistance} style={{ borderWidth: 1, justifyContent: 'center', alignItems: 'center', display: 'flex', width: 27, borderColor: '#F24F04', borderRadius: 8 }}>
                   <Text bold fontSize="xl">+</Text>
                 </TouchableOpacity>
               </View>
