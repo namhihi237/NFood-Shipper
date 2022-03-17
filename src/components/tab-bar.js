@@ -27,17 +27,6 @@ const TabBar = ({ state, descriptors, navigation }) => {
   const [updateLocationShipper] = useMutation(MUTATION.UPDATE_LOCATION, {
   });
 
-  // const { data } = useSubscription(SUBSCRIPTION.GET_ORDER_SHIPPING, {
-  //   onSubscriptionData: ({ client, subscriptionData }) => {
-  //     const { orderShipping } = subscriptionData.data;
-  //     if (orderShipping) {
-  //       console.log('orderShipping', orderShipping);
-  //       setShowModal(true);
-  //       setTimeHideOrder(25);
-  //     }
-  //   },
-  // });
-
   const getLocation = async () => {
     try {
       const status = await GPSUtils.requestPermission();
@@ -49,7 +38,6 @@ const TabBar = ({ state, descriptors, navigation }) => {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
         });
-        console.log("set");
         updateLocationShipper({
           variables: {
             latitude: location.coords.latitude,

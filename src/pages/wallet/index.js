@@ -26,9 +26,6 @@ export default function Wallet(props) {
 
   const { data, refetch } = useQuery(QUERY.GET_REPORT, {
     fetchPolicy: 'network-only',
-    onCompleted: (data) => {
-      console.log(data);
-    }
   });
 
   useEffect(() => {

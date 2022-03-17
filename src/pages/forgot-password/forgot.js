@@ -21,11 +21,9 @@ export default function Forgot(props) {
       phoneNumber
     },
     onCompleted: (data) => {
-      console.log();
       Toast('Gửi mã xác nhận thành công', 'success', 'top-right');
     },
     onError: (error) => {
-      console.log(error);
       Toast(error.message, 'danger', 'top-right');
     }
   });

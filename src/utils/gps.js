@@ -39,8 +39,6 @@ class GPS {
   }
 
   getCurrentPosition() {
-    //Geolocation.getCurrentPosition(info => console.log(info));
-
     return new Promise((resolve, reject) => {
       Geolocation.getCurrentPosition(
         (position) => {
