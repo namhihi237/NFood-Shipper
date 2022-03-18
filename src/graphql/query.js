@@ -28,7 +28,10 @@ export default {
       }
     }
 
-    getMaxDistanceFindOrder
+    getMaxDistanceFindOrder {
+      maxDistance
+      numberOfOrdersToDay
+    }
   }`,
 
   GET_ORDERS_PENDING: gql`query GetOrderByDistances {

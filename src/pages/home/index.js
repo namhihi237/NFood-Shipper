@@ -29,8 +29,8 @@ export default function Home(props) {
     onCompleted: (data) => {
       if (data.getUser) {
         setIsShippingOrder(data.getUser.isShippingOrder);
-        setMaxDistance(data.getMaxDistanceFindOrder);
-        setTempMaxDistance(data.getMaxDistanceFindOrder);
+        setMaxDistance(data.getMaxDistanceFindOrder.maxDistance);
+        setTempMaxDistance(data.getMaxDistanceFindOrder.maxDistance);
       }
     },
   });
@@ -194,17 +194,17 @@ export default function Home(props) {
     <View style={styles.mainContainer}>
       <Header title={"Nhận đơn giao hàng"} />
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', height: hp("20%") }}>
-        <View style={{ backgroundColor: '#fff', padding: 10, alignItems: 'center', flex: 1, paddingTop: 30 }}  >
-          <Text bold fontSize="lg">Tổng điểm thưởng</Text>
+        <View style={{ backgroundColor: '#fff', padding: 10, alignItems: 'center', flex: 1, paddingTop: 25 }}  >
+          <Text bold fontSize="lg">Số đơn hôm nay</Text>
           <Text fontSize="md">{timeUtils.convertDate(new Date())}</Text>
           <View style={styles.pointContainer}>
-            <Text fontSize="md" bold style={{ color: "red", marginRight: 15 }}>100 điểm</Text>
+            <Text fontSize="md" bold style={{ color: "red", marginRight: 15 }}>{data?.getMaxDistanceFindOrder?.numberOfOrdersToDay} đơn</Text>
             <FontAwesome5 name="award" size={20} color="#FFF" />
           </View>
         </View>
         <View style={{ height: hp("18%"), width: 2 }}></View>
 
-        <View style={{ backgroundColor: '#fff', padding: 10, alignItems: 'center', flex: 1, paddingTop: 30 }} >
+        <View style={{ backgroundColor: '#fff', padding: 10, alignItems: 'center', flex: 1, paddingTop: 25 }} >
           <Text bold fontSize="lg">Nhận đơn</Text>
           <Text fontSize="md">{isShippingOrder ? 'Đang bật' : 'Đã tắt'}</Text>
           <Switch
